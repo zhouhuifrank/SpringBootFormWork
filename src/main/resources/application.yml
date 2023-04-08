@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: open-api
+  profiles:
+    active: dev

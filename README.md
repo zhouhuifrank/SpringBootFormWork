@@ -5,6 +5,7 @@ SpringBoot项目模板,整合了常用组件和框架以及增删改查示例代
 + SpringBoot 2.7.10
 + Spring MVC
 + Mysql 8.x
++ Druid数据源
 + Mybatis
 + Mybatis-Plus
 + Spring Session Redis 分布式登录
@@ -14,6 +15,7 @@ SpringBoot项目模板,整合了常用组件和框架以及增删改查示例代
 + HuTool 工具类
 + Lombok 注解
 + Swagger + Knife4j 接口文档
++ Redis工具类封装
 + 全局请求拦截器(性能监控) AOP切面示例
 + 全局异常处理类
 + 通用对象
@@ -35,7 +37,7 @@ SpringBoot项目模板,整合了常用组件和框架以及增删改查示例代
   + util 工具类
 + config 配置类
 + controller 控制器处理请求地址映射
-+ mapper
++ mapper sql方法
 + model 数据模型
   + dto 请求类
   + entity 数据库实体类
