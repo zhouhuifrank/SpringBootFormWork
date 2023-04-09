@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.frankzhou.project.mapper.UserMapper">
+
+    <resultMap id="languageMap" type="com.frankzhou.project.model.entity.Post">
+        <id column="id" property="id" javaType="java.lang.Integer"></id>
+    </resultMap>
+
+    <sql id="baseColumn">
+        serial_no,name_cn,name_en,name_en_abbr,description,
+        create_time,update_time,standard_status,status
+    </sql>
+
+    <sql id="whereSql">
+        <where>
+            <if test="id != null and id != ''">
+                id = #{id}
+            </if>
+            <if test="serialNo != null and serialNo != ''">
+                and serial_no = #{serialNo}
+            </if>
+            <if test="nameCn != null and nameCn != ''">
+                and name_cn like concat('%',#{nameCn},'%')
+            </if>
+            <if test="nameEn != null and nameEn != ''">
+                and name_en like concat('%',#{nameEn},'%')
+            </if>
+            <if test="nameEnAbbr != null and nameEnAbbr != ''">
+                and name_en_abbr like concat('%',#{nameEnAbbr},'%')
+            </if>
+            <if test="description != null and description != ''">
+                and description = #{description}
+            </if>
+            <if test="standardStatus != null and standardStatus != ''">
+                and standard_status = #{standardStatus}
+            </if>
+            <if test="ids != null and ids.length>0">
+                and id in
+                <foreach collection="ids" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="serialList != null and serialList.length>0">
+                and serial_no in
+                <foreach collection="serialList" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            and status = 'NORMAL'
+        </where>
+    </sql>
+
+    <sql id="orderSql">
+        <if test="orderBy != null and orderBy != ''">
+            order by
+            #{orderBy}
+            <if test="sort == 'DESC'">
+                DESC
+            </if>
+        </if>
+    </sql>
+
+    <!-- List<StandardLanguageDO> selectByPage() -->
+    <select id="selectByPage" parameterType="com.frankzhou.datastandard.entity.StandardLanguageQueryDO" resultMap="languageMap">
+        select
+        <include refid="baseColumn"/>
+        from standard_language
+        <include refid="whereSql"/>
+        <include refid="orderSql"/>
+        limit #{startRow},#{limit}
+    </select>
+
+    <!-- Integer getPageCount() -->
+    <select id="getPageCount" parameterType="com.frankzhou.datastandard.entity.StandardLanguageQueryDO" resultType="Integer">
+        select
+        count(id)
+        from standard_language
+        <include refid="whereSql"/>
+    </select>
+
+    <!-- List<StandardLanguageDO> selectListByCond(StandardLanguageQueryDTO queryDTO) -->
+    <select id="selectListByCond" resultMap="languageMap">
+        select
+        <include refid="baseColumn"/>
+        from standard_language
+        <include refid="whereSql"/>
+    </select>
+
+    <!-- Integer batchInsert(@Param("list") List<StandardLanguageDO> doList) -->
+    <insert id="batchInsert" parameterType="list">
+        insert into standard_language
+        (<include refid="baseColumn"/>)
+        values
+        <foreach collection="list" item="target" index="index" separator=",">
+            (
+            #{target.serialNo},
+            #{target.nameCn},
+            #{target.nameEn},
+            #{target.nameEnAbbr},
+            #{target.description},
+            #{target.createTime},
+            #{target.updateTime},
+            #{target.standardStatus},
+            #{target.status}
+            )
+        </foreach>
+    </insert>
+
+    <!-- Integer batchUpdate(@Param("list") List<StandardLanguageDO> doList) -->
+    <update id="batchUpdate" parameterType="list">
+        update standard_language
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="name_cn = case" suffix="end,">
+                <foreach collection="list" item="targetDo" index="index">
+                    <if test="targetDo.nameCn != null">
+                        when serial_no = #{targetDo.serialNo}
+                        then #{targetDo.nameCn}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="name_en = case" suffix="end,">
+                <foreach collection="list" item="targetDo" index="index">
+                    <if test="targetDo.nameEn != null">
+                        when serial_no = #{targetDo.serialNo}
+                        then #{targetDo.nameEn}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="name_en_abbr = case" suffix="end,">
+                <foreach collection="list" item="targetDo" index="index">
+                    <if test="targetDo.nameEnAbbr != null">
+                        when serial_no = #{targetDo.serialNo}
+                        then #{targetDo.nameEnAbbr}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="description = case" suffix="end,">
+                <foreach collection="list" item="targetDo" index="index">
+                    <if test="targetDo.description != null">
+                        when serial_no = #{targetDo.serialNo}
+                        then #{targetDo.description}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="standard_status = case" suffix="end,">
+                <foreach collection="list" item="targetDo" index="index">
+                    <if test="targetDo.standardStatus != null">
+                        when serial_no = #{targetDo.serialNo}
+                        then #{targetDo.standardStatus}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        where
+        status = "NORMAL"
+        and serial_no in
+        <foreach collection="list" item="targetDo" open="(" separator="," close=")">
+            #{targetDo.serialNo}
+        </foreach>
+    </update>
+
+    <!-- Integer batchDelete(@Param("ids") String[] idArray) -->
+    <update id="batchDelete" parameterType="list">
+        update standard_language
+        set
+        status = 'DELETED'
+        where
+        status = 'NORMAL'
+        <if test="ids.length > 0 and ids != null">
+            and id in
+            <foreach collection="ids" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </update>
+
+    <!-- Integer batchPublish(@Param("ids") String[] idArray) -->
+    <update id="batchPublish" parameterType="list">
+        update standard_language
+        set
+        standard_status = "PUBLISHED"
+        where
+        status = 'NORMAL'
+        <if test="ids.length > 0 and ids != null">
+            and id in
+            <foreach collection="ids" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </update>
+
+    <!-- Integer getMaxSerialNo() -->
+    <select id="getMaxSerialNo" resultType="Integer">
+        select max(right(left(serial_no,7),6)+0)
+        from standard_language
+    </select>
+
+</mapper>
