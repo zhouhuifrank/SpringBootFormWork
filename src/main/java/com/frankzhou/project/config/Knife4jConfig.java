@@ -21,6 +21,10 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Profile("dev")
 public class Knife4jConfig {
 
+    /**
+     * 接口文档配置
+     * 文档地址:http://ip:port/doc.html
+     */
     @Bean
     public Docket defaultApi2() {
         return new Docket(DocumentationType.SWAGGER_2)

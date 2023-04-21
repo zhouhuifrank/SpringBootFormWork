@@ -19,16 +19,34 @@ import java.util.Map;
 public class ResultDTO<T> implements Serializable {
     private static final Long serialVersionUID = 1L;
 
+    /**
+     * 响应数据
+     */
     private T data;
-    // 响应状态码 200表示ok 其他表示异常
+
+    /**
+     * 响应状态码 200表示ok 其他表示异常
+     */
     private Integer resultCode;
-    // 错误英文描述
+
+    /**
+     * 错误英文描述
+     */
     private String error;
-    // 错误中文描述
+
+    /**
+     * 错误中文描述
+     */
     private String errorMsg;
-    // 是否请求成功
+
+    /**
+     *  是否请求成功
+     */
     private Boolean isSuccess;
-    // hashMap缓存
+
+    /**
+     * 缓存数据
+     */
     private Map<String,Object> cacheMap = new HashMap<>();
 
 
@@ -46,6 +64,7 @@ public class ResultDTO<T> implements Serializable {
         ResultDTO<T> result = new ResultDTO<>();
         result.setResultCode(200);
         result.setIsSuccess(true);
+
         return result;
     }
 
@@ -73,7 +92,7 @@ public class ResultDTO<T> implements Serializable {
         return this;
     }
 
-    private Boolean requestSuccess() {
+    private Boolean requestSuccessIs() {
         return this.isSuccess == true;
     }
 }

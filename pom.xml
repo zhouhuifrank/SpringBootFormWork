@@ -12,9 +12,8 @@
 
 	<groupId>com.frankzhou</groupId>
 	<artifactId>SpringBootFormWork</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>SpringBootFromWork</name>
-	<description>OpenApi</description>
 
 	<properties>
 		<java.version>1.8</java.version>

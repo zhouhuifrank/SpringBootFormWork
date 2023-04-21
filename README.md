@@ -25,7 +25,7 @@ SpringBoot项目模板,整合了常用组件和框架以及增删改查示例代
 + 原生Mybatis xml代码 Mybatis-Plus QueryWrapper代码
 + sql建表语句
 + 单元测试 
-+ 接口文档地址:localhost:7529/api/doc.html 可以在线调试
++ 接口文档地址:localhost:8080/open-api/doc.html 可以在线调试
 
 # 模板分包说明
 + annotation 自定义注解

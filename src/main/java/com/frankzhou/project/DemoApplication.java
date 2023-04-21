@@ -10,10 +10,10 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 @SpringBootApplication
 @MapperScan("com.frankzhou.project.mapper")
-public class OpenApiApplication {
+public class DemoApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(OpenApiApplication.class, args);
+		SpringApplication.run(DemoApplication.class, args);
 		System.out.println("================================================");
 		System.out.println("=============Spring Boot Start Succeed==========");
 		System.out.println("=================================================");

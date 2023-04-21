@@ -1,5 +1,7 @@
 package com.frankzhou.project.model.vo;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -9,6 +11,7 @@ import java.util.Date;
  * @description 用户前端显示类
  * @date 2023-04-08
  */
+@Data
 public class UserVO implements Serializable {
     private static final long serialVersionUID = 1L;
 

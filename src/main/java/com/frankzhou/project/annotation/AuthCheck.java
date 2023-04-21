@@ -13,7 +13,13 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AuthCheck {
 
+    /**
+     * 拥有任意一个权限即可
+     */
     String[] anyRole() default "";
 
+    /**
+     * 必须拥有某个特定权限
+     */
     String mustRole() default "";
 }

@@ -12,10 +12,18 @@ import java.io.Serializable;
 public class ResultCodeDTO implements Serializable {
     private static final Long serialVersionUID = 1L;
 
-    // 错误状态码
+    /**
+     * 错误状态码
+     */
     private Integer code;
-    // 错误英文信息
+
+    /**
+     * 错误英文信息
+     */
     private String message;
-    // 错误中文信息
+
+    /**
+     * 错误中文信息
+     */
     private String messageInfo;
 }

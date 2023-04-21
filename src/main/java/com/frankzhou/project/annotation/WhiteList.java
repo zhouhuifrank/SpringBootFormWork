@@ -13,5 +13,13 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface WhiteList {
 
-    String userId() default "";
+    /**
+     * 关键字段
+     */
+    String key() default "";
+
+    /**
+     * 拦截时返回的json
+     */
+    String returnJson() default "";
 }

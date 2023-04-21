@@ -1,10 +1,10 @@
 server:
-  port: 7070
+  port: 8080
 
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/comment_system?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:3306/spring_frame_work?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
     username: root
     password: root
     type: com.alibaba.druid.pool.DruidDataSource
@@ -31,7 +31,7 @@ spring:
 
   mvc:
     pathmatch:
-      matching-strategy: ANT_PATH_MATCHER
+       matching-strategy: ANT_PATH_MATCHER
   # session 失效时间（分钟）
   session:
     timeout: 86400

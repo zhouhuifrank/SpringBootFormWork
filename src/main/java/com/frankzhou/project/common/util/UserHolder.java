@@ -6,5 +6,5 @@ package com.frankzhou.project.common.util;
  * @description
  * @date 2023-04-09
  */
-public class UserLocal {
+public class UserHolder {
 }
