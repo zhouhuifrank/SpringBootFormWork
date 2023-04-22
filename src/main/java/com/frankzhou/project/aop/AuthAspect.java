@@ -4,6 +4,7 @@ import com.frankzhou.project.annotation.AuthCheck;
 import com.frankzhou.project.common.ResultCodeConstant;
 import com.frankzhou.project.common.ResultDTO;
 import com.frankzhou.project.common.exception.BusinessException;
+import com.frankzhou.project.model.dto.user.UserDTO;
 import com.frankzhou.project.model.vo.UserVO;
 import com.frankzhou.project.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -47,15 +48,15 @@ public class AuthAspect {
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
         HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
 
-        ResultDTO<UserVO> userResult = userService.getLoginUser(request);
+        ResultDTO<UserDTO> userResult = userService.getLoginUser();
         if (userResult.getResultCode() != 200) {
             throw new BusinessException(ResultCodeConstant.DB_QUERY_NO_DATA);
         }
 
         // 校验权限
-        UserVO loginUser = userResult.getData();
+        UserDTO loginUser = userResult.getData();
         if (CollectionUtils.isNotEmpty(anyRoleList)) {
-            String userRole = loginUser.getUserRole();
+            String userRole = loginUser.getRole();
             // 拥有任意权限即可通过
             if (!anyRoleList.contains(userRole)) {
                 throw new BusinessException(ResultCodeConstant.NO_AUTH_ERROR);
@@ -63,7 +64,7 @@ public class AuthAspect {
         }
 
         if (StringUtils.isNotBlank(mustRole)) {
-            String userRole = loginUser.getUserRole();
+            String userRole = loginUser.getRole();
             if (!mustRole.equals(userRole)) {
                 // 必须拥有该权限才能通过
                 throw new BusinessException(ResultCodeConstant.NO_AUTH_ERROR);

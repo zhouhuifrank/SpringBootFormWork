@@ -16,6 +16,19 @@ public class ResultCodeConstant {
 
     // 业务相关错误码
 
+    public static final ResultCodeDTO PHONE_IS_INVALID = new ResultCodeDTO(401,"phone is invalid","手机号不合法");
+
+    public static final ResultCodeDTO CODE_IS_ERROR = new ResultCodeDTO(402,"verify code is error","验证码错误");
+
+    public static final ResultCodeDTO USER_NOT_REGISTER = new ResultCodeDTO(403,"user is not register","用户没有注册");
+
+    public static final ResultCodeDTO PASSWORD_ERROR = new ResultCodeDTO(404,"password error","密码错误");
+
+    public static final ResultCodeDTO USER_HAS_EXISTED = new ResultCodeDTO(405,"user has existed","用户已经注册");
+
+    public static final ResultCodeDTO TOKEN_NOT_EXISTED = new ResultCodeDTO(406,"token is not existed","token 不存在");
+
+    public static final ResultCodeDTO USER_NOT_LOGIN = new ResultCodeDTO(407,"user is not login","用户未登录");
 
     // 数据库相关错误码
 

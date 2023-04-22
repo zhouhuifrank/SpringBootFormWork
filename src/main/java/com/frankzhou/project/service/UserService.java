@@ -24,13 +24,13 @@ public interface UserService {
 
     ResultDTO<String> sendCode(String phone);
 
-    ResultDTO<UserVO> userCodeLogin(UserLoginRequest loginRequest);
+    ResultDTO<UserDTO> userCodeLogin(UserLoginRequest loginRequest);
 
     ResultDTO<Long> userRegister(UserRegisterRequest registerRequest);
 
-    ResultDTO<UserVO> userPasswordLogin(UserLoginRequest loginRequest);
+    ResultDTO<UserDTO> userPasswordLogin(UserLoginRequest loginRequest);
 
-    ResultDTO<UserVO> getLoginUser(HttpServletRequest httpServletRequest);
+    ResultDTO<UserDTO> getLoginUser();
 
     ResultDTO<Boolean> userLogout(HttpServletRequest httpServletRequest);
 

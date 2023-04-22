@@ -46,8 +46,8 @@ public class LogAspect {
         // 执行方法
         Object result = jp.proceed();
         stopWatch.stop();
-        long runTime = stopWatch.getTotalTimeMillis() / 1000;
-        log.info("请求id:{} 请求路径:{} 服务器地址:{}:{} 方法执行时间:{}s",requestId,
+        long runTime = stopWatch.getTotalTimeMillis();
+        log.info("请求id:{} 请求路径:{} 服务器地址:{}:{} 方法执行时间:{}ms",requestId,
                 url,request.getRemoteHost(),request.getRemotePort(),runTime);
         return result;
     }

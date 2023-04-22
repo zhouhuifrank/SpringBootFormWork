@@ -47,6 +47,7 @@ public class PostController {
         return postService.deletePost(deleteRequest);
     }
 
+    @AuthCheck(mustRole = "admin")
     @ApiOperation(value = "【删除】批量删除帖子",notes = "批量帖子删除")
     @PostMapping("/batchDelete")
     public ResultDTO<Boolean> batchDeletePost(DeleteRequest deleteRequest) {

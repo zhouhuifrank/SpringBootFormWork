@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.frankzhou.project.common.*;
 import com.frankzhou.project.common.constant.OrderConstant;
+import com.frankzhou.project.common.constant.UserRoleConstant;
 import com.frankzhou.project.common.eunms.PostGenderStatusEnum;
 import com.frankzhou.project.common.eunms.PostReviewStatusEnum;
 import com.frankzhou.project.common.exception.BusinessException;
@@ -15,6 +16,7 @@ import com.frankzhou.project.mapper.PostMapper;
 import com.frankzhou.project.model.dto.post.PostAddRequest;
 import com.frankzhou.project.model.dto.post.PostQueryRequest;
 import com.frankzhou.project.model.dto.post.PostUpdateRequest;
+import com.frankzhou.project.model.dto.user.UserDTO;
 import com.frankzhou.project.model.entity.Post;
 import com.frankzhou.project.model.vo.PostVO;
 import com.frankzhou.project.service.PostService;
@@ -58,7 +60,12 @@ public class PostServiceImpl implements PostService {
         }
 
         // 获取登录用户
-        post.setUserId(1L);
+        ResultDTO<UserDTO> loginResult = userService.getLoginUser();
+        if (loginResult.getResultCode() != 200) {
+            return ResultDTO.getErrorResult(ResultCodeConstant.USER_NOT_LOGIN);
+        }
+        UserDTO loginUser = loginResult.getData();
+        post.setUserId(loginUser.getId());
 
         // 新增的时候必须为待审核状态
         if (!post.getReviewStatus().equals(PostReviewStatusEnum.VERIFY_BEFORE.getCode())) {
@@ -86,6 +93,14 @@ public class PostServiceImpl implements PostService {
         }
 
         // 只有管理员和自己才能删除帖子
+        ResultDTO<UserDTO> loginResult = userService.getLoginUser();
+        if (loginResult.getResultCode() != 200) {
+            return ResultDTO.getErrorResult(ResultCodeConstant.USER_NOT_LOGIN);
+        }
+        UserDTO loginUser = loginResult.getData();
+        if (!post.getUserId().equals(loginUser.getId()) || !loginUser.getRole().equals(UserRoleConstant.ADMIN_ROLE)) {
+            return ResultDTO.getErrorResult(ResultCodeConstant.NO_AUTH_ERROR);
+        }
 
         Integer deleteCount = postMapper.deleteById(postId);
         if (deleteCount < 1) {
@@ -136,6 +151,14 @@ public class PostServiceImpl implements PostService {
         }
 
         // 只有管理员和作者本人可以更新
+        ResultDTO<UserDTO> loginResult = userService.getLoginUser();
+        if (loginResult.getResultCode() != 200) {
+            return ResultDTO.getErrorResult(ResultCodeConstant.USER_NOT_LOGIN);
+        }
+        UserDTO loginUser = loginResult.getData();
+        if (!post.getUserId().equals(loginUser.getId()) || !loginUser.getRole().equals(UserRoleConstant.ADMIN_ROLE)) {
+            return ResultDTO.getErrorResult(ResultCodeConstant.NO_AUTH_ERROR);
+        }
 
         Integer updateCount = postMapper.updateById(post);
         if (updateCount < 1) {

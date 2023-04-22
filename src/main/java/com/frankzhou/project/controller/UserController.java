@@ -44,7 +44,7 @@ public class UserController {
     @ApiOperation(value = "【短信】发送短信验证码",notes = "发送短信验证码")
     @PostMapping("/sendCode")
     public ResultDTO<String> sendCode(@RequestParam String phone) {
-        return ResultDTO.getSuccessResult();
+        return userService.sendCode(phone);
     }
 
     /**
@@ -56,8 +56,8 @@ public class UserController {
     */
     @ApiOperation(value = "【登录】验证码登录",notes = "短信验证码登录")
     @PostMapping("/code/login")
-    public ResultDTO<UserVO> codeLogin(@RequestBody UserLoginRequest userLoginRequest) {
-        return ResultDTO.getSuccessResult();
+    public ResultDTO<UserDTO> codeLogin(@RequestBody UserLoginRequest userLoginRequest) {
+        return userService.userCodeLogin(userLoginRequest);
     }
 
     /**
@@ -70,7 +70,7 @@ public class UserController {
     @ApiOperation(value = "【注册】用户注册", notes = "用户注册")
     @PostMapping("/register")
     public ResultDTO<Long> register(@RequestBody UserRegisterRequest userRegisterRequest) {
-        return ResultDTO.getSuccessResult();
+        return userService.userRegister(userRegisterRequest);
     }
 
     /**
@@ -82,8 +82,8 @@ public class UserController {
     */
     @ApiOperation(value = "【登录】密码登录",notes = "密码登录")
     @PostMapping("/password/login")
-    public ResultDTO<UserVO> passwordLogin(@RequestBody UserLoginRequest userLoginRequest, HttpServletRequest httpServletRequest) {
-        return ResultDTO.getSuccessResult();
+    public ResultDTO<UserDTO> passwordLogin(@RequestBody UserLoginRequest userLoginRequest, HttpServletRequest httpServletRequest) {
+        return userService.userPasswordLogin(userLoginRequest);
     }
 
     /**
@@ -95,7 +95,7 @@ public class UserController {
     @ApiOperation(value = "【退出】用户登出",notes = "用户登出")
     @PostMapping("/logout")
     public ResultDTO<Boolean> logout(HttpServletRequest httpServletRequest) {
-        return ResultDTO.getSuccessResult();
+        return userService.userLogout(httpServletRequest);
     }
 
     /**
@@ -106,8 +106,8 @@ public class UserController {
     */
     @ApiOperation(value = "【查询】获取当前登录用户",notes = "获取当前登录用户")
     @GetMapping("/get/login")
-    public ResultDTO<UserVO> getLoginUser(HttpServletRequest httpServletRequest) {
-        return ResultDTO.getSuccessResult();
+    public ResultDTO<UserDTO> getLoginUser(HttpServletRequest httpServletRequest) {
+        return userService.getLoginUser();
     }
 
     // ================用户增删改查===========================
