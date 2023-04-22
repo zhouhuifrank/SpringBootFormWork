@@ -1,5 +1,7 @@
 package com.frankzhou.project.common;
 
+import lombok.Data;
+
 import java.io.Serializable;
 
 /**
@@ -8,6 +10,7 @@ import java.io.Serializable;
  * @description 分页查找请求类 需要分页查找时继承即可
  * @date 2023-04-08
  */
+@Data
 public class PageRequest implements Serializable {
     private static final long serialVersionUID = 1L;
 

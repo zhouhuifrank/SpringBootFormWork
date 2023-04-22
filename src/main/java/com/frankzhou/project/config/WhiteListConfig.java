@@ -11,10 +11,10 @@ import org.springframework.context.annotation.Configuration;
  * @description 白名单配置
  * @date 2023-04-22
  */
-@Configuration
 public class WhiteListConfig {
 
-    @Value("zhou.whitelist.users")
+    /*
+
     private String users;
 
     @Bean("whiteListConfig")
@@ -22,5 +22,6 @@ public class WhiteListConfig {
     public String whiteListConfig() {
         return users;
     }
+    */
 
 }
