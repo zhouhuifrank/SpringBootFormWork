@@ -6,15 +6,27 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
- * 帖子收藏
- * @TableName post_favour
+ * @author This.FrankZhou
+ * @version 1.0
+ * @description 帖子收藏
+ * @date 2023-04-30
  */
-@TableName(value ="post_favour")
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@TableName(value ="post_favour")
 public class PostFavour implements Serializable {
+    @TableField(exist = false)
+    private static final long serialVersionUID = 1L;
+
     /**
      * id
      */
@@ -24,27 +36,24 @@ public class PostFavour implements Serializable {
     /**
      * 帖子 id
      */
-    @TableField(value = "postId")
-    private Long postid;
+    @TableField(value = "post_id")
+    private Long postId;
 
     /**
      * 创建用户 id
      */
-    @TableField(value = "userId")
-    private Long userid;
+    @TableField(value = "user_id")
+    private Long userId;
 
     /**
      * 创建时间
      */
-    @TableField(value = "createTime")
-    private Date createtime;
+    @TableField(value = "create_time")
+    private Date createTime;
 
     /**
      * 更新时间
      */
-    @TableField(value = "updateTime")
-    private Date updatetime;
-
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
+    @TableField(value = "update_time")
+    private Date updateTime;
 }

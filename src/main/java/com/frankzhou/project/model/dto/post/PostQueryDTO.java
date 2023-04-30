@@ -1,12 +1,11 @@
 package com.frankzhou.project.model.dto.post;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.frankzhou.project.common.PageRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 /**
  * @author This.FrankZhou
@@ -17,19 +16,20 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostQueryRequest extends PageRequest {
+public class PostQueryDTO extends PageRequest {
+    private static final long serialVersionUID = 1L;
 
     private Long id;
 
-    private String place;
+    private String title;
 
-    private String job;
+    private String searchTest;
 
-    private String loveExperience;
+    private List<String> tags;
 
-    private String content;
-
-    private Integer reviewStatus;
+    private List<String> orTags;
 
     private Long userId;
+
+    private Long favourUserId;
 }

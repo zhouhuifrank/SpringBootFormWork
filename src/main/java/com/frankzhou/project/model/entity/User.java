@@ -2,6 +2,7 @@ package com.frankzhou.project.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +16,7 @@ import java.util.Date;
  * @date 2023-04-08
  */
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName(value = "user")
