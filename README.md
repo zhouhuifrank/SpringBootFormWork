@@ -12,6 +12,8 @@ SpringBoot项目模板,整合了常用组件和框架以及增删改查示例代
 + Spring Data Reids 缓存
 + Spring Data ElasticSearch 搜索引擎
 + Spring AOP
++ Wxmp 微信公众号API
++ EasyExcel excel表格处理
 + HuTool 工具类
 + Lombok 注解
 + Swagger + Knife4j 接口文档
