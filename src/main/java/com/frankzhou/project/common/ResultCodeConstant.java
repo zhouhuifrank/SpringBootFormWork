@@ -26,9 +26,15 @@ public class ResultCodeConstant {
 
     public static final ResultCodeDTO USER_HAS_EXISTED = new ResultCodeDTO(405,"user has existed","用户已经注册");
 
-    public static final ResultCodeDTO TOKEN_NOT_EXISTED = new ResultCodeDTO(406,"token is not existed","token 不存在");
+    public static final ResultCodeDTO TOKEN_NOT_EXISTED = new ResultCodeDTO(406,"token is not existed","token不存在");
 
     public static final ResultCodeDTO USER_NOT_LOGIN = new ResultCodeDTO(407,"user is not login","用户未登录");
+
+    public static final ResultCodeDTO POST_THUMB_ERROR = new ResultCodeDTO(408,"post thumb failed","帖子点赞失败，请重试");
+
+    public static final ResultCodeDTO POST_FAVOUR_ERROR = new ResultCodeDTO(409,"post favour failed","帖子收藏失败，请重试");
+
+    public static final ResultCodeDTO DISTRIBUTED_LOCK_FAIL = new ResultCodeDTO(410,"distributed lock acquire fail","分布式锁获取失败");
 
     // 数据库相关错误码
 

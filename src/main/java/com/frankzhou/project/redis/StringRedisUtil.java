@@ -31,7 +31,7 @@ public class StringRedisUtil {
 
     // =================通用redis操作====================
 
-    private Boolean setExpire(String key, Long time, TimeUnit unit) {
+    public Boolean setExpire(String key, Long time, TimeUnit unit) {
         try {
             if (time > 0) {
                 return stringRedisTemplate.expire(key,time,unit);
@@ -43,7 +43,7 @@ public class StringRedisUtil {
         return Boolean.FALSE;
     }
 
-    private Boolean setExpire(String key, Long time) {
+    public Boolean setExpire(String key, Long time) {
         try {
             if (time > 0) {
                 return stringRedisTemplate.expire(key,time,TimeUnit.SECONDS);
@@ -55,7 +55,7 @@ public class StringRedisUtil {
         return false;
     }
 
-    private Long getExpire(String key) {
+    public Long getExpire(String key) {
         try {
             return stringRedisTemplate.getExpire(key);
         } catch (Exception e) {
@@ -64,7 +64,7 @@ public class StringRedisUtil {
         return null;
     }
 
-    private Boolean hashKey(String key) {
+    public Boolean hashKey(String key) {
         try {
             return stringRedisTemplate.hasKey(key);
         } catch (Exception e) {
@@ -73,7 +73,7 @@ public class StringRedisUtil {
         return Boolean.FALSE;
     }
 
-    private Boolean deleteObject(String key) {
+    public Boolean deleteObject(String key) {
         try {
             return stringRedisTemplate.delete(key);
         } catch (Exception e) {
@@ -82,7 +82,7 @@ public class StringRedisUtil {
         return Boolean.FALSE;
     }
 
-    private Long deleteObject(Collection<String> collection) {
+    public Long deleteObject(Collection<String> collection) {
         try {
             Long count = stringRedisTemplate.delete(collection);
             return count;
@@ -95,7 +95,7 @@ public class StringRedisUtil {
 
     // =================String类型操作===================
 
-    private <T> void setStringObject(String key,T value) {
+    public <T> void setStringObject(String key,T value) {
         try {
             String json = JSONUtil.toJsonStr(value);
             stringRedisTemplate.opsForValue().set(key,json);
@@ -104,7 +104,7 @@ public class StringRedisUtil {
         }
     }
 
-    private <T> void setStringObject(String key,T value,Long time,TimeUnit unit) {
+    public <T> void setStringObject(String key,T value,Long time,TimeUnit unit) {
         try {
             String json = JSONUtil.toJsonStr(value);
             stringRedisTemplate.opsForValue().set(key,json,time,unit);
@@ -113,7 +113,7 @@ public class StringRedisUtil {
         }
     }
 
-    private <T> T getStringObject(String key,Class<T> clazz) {
+    public <T> T getStringObject(String key,Class<T> clazz) {
         try {
             String json = stringRedisTemplate.opsForValue().get(key);
             T result = BeanUtil.toBean(json, clazz);
@@ -126,7 +126,7 @@ public class StringRedisUtil {
 
     // =================Hash类型操作======================
 
-    private <T> void setHashObject(String key,T value) {
+    public <T> void setHashObject(String key,T value) {
         try {
             Map<String, Object> stringObjectMap = BeanUtil.beanToMap(value, new HashMap<>(),
                     CopyOptions.create()
@@ -138,7 +138,7 @@ public class StringRedisUtil {
         }
     }
 
-    private <T> void setHashObject(String key,T value,Long time,TimeUnit unit) {
+    public <T> void setHashObject(String key,T value,Long time,TimeUnit unit) {
         try {
             Map<String, Object> stringObjectMap = BeanUtil.beanToMap(value, new HashMap<>(),
                     CopyOptions.create()
@@ -151,7 +151,7 @@ public class StringRedisUtil {
         }
     }
 
-    private <T> T getHashObject(String key,Class<T> clazz) {
+    public <T> T getHashObject(String key,Class<T> clazz) {
         try {
             Map<Object, Object> entries = stringRedisTemplate.opsForHash().entries(key);
             T target = null;
@@ -172,7 +172,7 @@ public class StringRedisUtil {
 
     // =================List类型操作======================
 
-    private <T> void setListObject(String key,List<T> cacheList) {
+    public <T> void setListObject(String key,List<T> cacheList) {
         try {
             List<String> stringList = cacheList.stream().map(JSONUtil::toJsonStr).collect(Collectors.toList());
             stringRedisTemplate.opsForList().leftPushAll(key,stringList);
@@ -181,7 +181,7 @@ public class StringRedisUtil {
         }
     }
 
-    private <T> void setListObject(String key,List<T> cacheList,Long time,TimeUnit unit) {
+    public <T> void setListObject(String key,List<T> cacheList,Long time,TimeUnit unit) {
         try {
             List<String> stringList = cacheList.stream().map(JSONUtil::toJsonStr).collect(Collectors.toList());
             stringRedisTemplate.opsForList().leftPushAll(key,stringList);
@@ -191,7 +191,7 @@ public class StringRedisUtil {
         }
     }
 
-    private <T> List<T> getListObject(String key,Class<T> clazz) {
+    public <T> List<T> getListObject(String key,Class<T> clazz) {
         try {
             List<T> resultList = new ArrayList<>();
             List<String> result = stringRedisTemplate.opsForList().range(key, 0, -1);
@@ -208,24 +208,24 @@ public class StringRedisUtil {
 
     // =================Set类型操作=======================
 
-    private <T> void setSetObject(String key,T value) {
+    public <T> void setSetObject(String key,T value) {
         try {
         } catch (Exception e) {
             log.warn("Redis服务异常");
         }
     }
 
-    private <T> T getSetObject(String key,Class<T> clazz) {
+    public <T> T getSetObject(String key,Class<T> clazz) {
         return null;
     }
 
     // =================SortedSet类型操作=================
 
-    private <T> void setZSetObject(String key,T value) {
+    public <T> void setZSetObject(String key,T value) {
         return;
     }
 
-    private <T> T getZSetObject(String key,Class<T> clazz) {
+    public <T> T getZSetObject(String key,Class<T> clazz) {
         return null;
     }
 

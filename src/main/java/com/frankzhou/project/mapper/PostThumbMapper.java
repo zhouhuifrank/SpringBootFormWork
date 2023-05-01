@@ -2,6 +2,7 @@ package com.frankzhou.project.mapper;
 
 import com.frankzhou.project.model.entity.PostThumb;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
 * @author 22806
@@ -9,6 +10,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @createDate 2023-04-30 17:21:09
 * @Entity com.frankzhou.project.model.entity.PostThumb
 */
+@Mapper
 public interface PostThumbMapper extends BaseMapper<PostThumb> {
 
 }

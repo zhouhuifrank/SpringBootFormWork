@@ -34,9 +34,12 @@ SpringBoot项目模板,整合了常用组件和框架以及增删改查示例代
   + constant 常量
   + enums 枚举类
   + exception 自定义异常
+  + interceptor 拦截器
   + util 工具类
 + config 配置类
 + controller 控制器处理请求地址映射
++ es  ElasticSearch搜索方法
++ manager service通用能力下沉
 + mapper sql方法
 + model 数据模型
   + dto 请求类
@@ -45,3 +48,5 @@ SpringBoot项目模板,整合了常用组件和框架以及增删改查示例代
   + vo 响应类
 + redis redis工具类封装
 + service 业务逻辑层
++ task 定时任务方法
++ wxmp 微信公众号对接

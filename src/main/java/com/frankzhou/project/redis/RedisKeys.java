@@ -16,21 +16,7 @@ public class RedisKeys {
 
     public static final Long LOGIN_USER_TTL = 30L;
 
-    public static final String CACHE_SHOP_KEY = "cache:shop:";
+    public static final String POST_THUMB_KEY = "post:thumb:";
 
-    public static final Long CACHE_SHOP_TTL = 30L;
-
-    public static final String CACHE_SHOP_TYPE_KEY = "cache:shop:type:";
-
-    public static final String CACHE_NULL_KEY = "cache:null:";
-
-    public static final Long CACHE_NULL_TTL = 30L;
-
-    public static final String MUTEX_LOCK_KEY = "mutex:lock:";
-
-    public static final Long MUTEX_LOCK_TTL = 10L;
-
-    public static final String VOUCHER_STOCK_KEY = "voucher:stock:";
-
-    public static final String VOUCHER_LIST_KEY = "voucher:list:";
+    public static final String POST_FAVOUR_KEY = "post:favour:";
 }

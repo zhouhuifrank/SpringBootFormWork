@@ -28,6 +28,8 @@
 		<easyexcel.version>3.1.2</easyexcel.version>
 		<huttol.version>5.8.9</huttol.version>
 		<juint.version>4.13.2</juint.version>
+		<wxmp.version>4.4.0</wxmp.version>
+		<cos.version>5.6.89</cos.version>
 	</properties>
 
 	<dependencies>
@@ -47,6 +49,14 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-aop</artifactId>
 		</dependency>
+		<!-- 微信公众号API -->
+		<!--
+		<dependency>
+			<groupId>com.github.binarywang</groupId>
+			<artifactId>wx-java-mp-spring-boot-starter</artifactId>
+			<version>${wxmp.version}</version>
+		</dependency>
+		-->
 		<dependency>
 			<groupId>org.mybatis.spring.boot</groupId>
 			<artifactId>mybatis-spring-boot-starter</artifactId>
@@ -119,6 +129,11 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>

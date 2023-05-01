@@ -3,9 +3,9 @@ package com.frankzhou.project.service;
 import com.frankzhou.project.common.DeleteRequest;
 import com.frankzhou.project.common.PageResultDTO;
 import com.frankzhou.project.common.ResultDTO;
-import com.frankzhou.project.model.dto.post.PostAddRequest;
-import com.frankzhou.project.model.dto.post.PostQueryRequest;
-import com.frankzhou.project.model.dto.post.PostUpdateRequest;
+import com.frankzhou.project.model.dto.post.PostAddDTO;
+import com.frankzhou.project.model.dto.post.PostQueryDTO;
+import com.frankzhou.project.model.dto.post.PostUpdateDTO;
 import com.frankzhou.project.model.vo.PostVO;
 
 import java.util.List;
@@ -18,17 +18,17 @@ import java.util.List;
  */
 public interface PostService {
 
-    ResultDTO<Long> insertPost(PostAddRequest addRequest);
+    ResultDTO<Long> insertPost(PostAddDTO addRequest);
 
     ResultDTO<Boolean> deletePost(DeleteRequest deleteRequest);
 
     ResultDTO<Boolean> batchDeletePost(DeleteRequest deleteRequest);
 
-    ResultDTO<Boolean> updatePost(PostUpdateRequest updateRequest);
+    ResultDTO<Boolean> updatePost(PostUpdateDTO updateRequest);
 
-    ResultDTO<PostVO> getPostById(PostQueryRequest queryRequest);
+    ResultDTO<PostVO> getPostById(PostQueryDTO queryRequest);
 
-    ResultDTO<List<PostVO>> getPostList(PostQueryRequest queryRequest);
+    ResultDTO<List<PostVO>> getPostList(PostQueryDTO queryRequest);
 
-    PageResultDTO<List<PostVO>> getPostByPage(PostQueryRequest queryRequest);
+    PageResultDTO<List<PostVO>> getPostByPage(PostQueryDTO queryRequest);
 }

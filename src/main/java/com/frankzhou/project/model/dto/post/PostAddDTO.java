@@ -24,6 +24,4 @@ public class PostAddDTO implements Serializable {
     private String content;
 
     private List<String> tags;
-
-    private Long userId;
 }

@@ -4,16 +4,16 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.frankzhou.project.mapper.PostFavourMapper">
 
-    <resultMap id="BaseResultMap" type="com.frankzhou.project.model.entity.PostFavour">
-            <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="postid" column="postId" jdbcType="BIGINT"/>
-            <result property="userid" column="userId" jdbcType="BIGINT"/>
-            <result property="createtime" column="createTime" jdbcType="TIMESTAMP"/>
-            <result property="updatetime" column="updateTime" jdbcType="TIMESTAMP"/>
+    <resultMap id="PostFavourMap" type="com.frankzhou.project.model.entity.PostFavour">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="postId" column="post_id" jdbcType="BIGINT"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <sql id="Base_Column_List">
-        id,postId,userId,
-        createTime,updateTime
+    <sql id="QueryColumn">
+        id,post_id,user_id,
+        create_time,update_time
     </sql>
 </mapper>

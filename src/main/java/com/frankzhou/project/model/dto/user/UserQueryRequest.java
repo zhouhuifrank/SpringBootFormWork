@@ -1,6 +1,7 @@
 package com.frankzhou.project.model.dto.user;
 
 import com.frankzhou.project.common.PageRequest;
+import lombok.Data;
 
 import java.io.Serializable;
 
@@ -10,6 +11,7 @@ import java.io.Serializable;
  * @description 用户查询请求类
  * @date 2023-04-08
  */
+@Data
 public class UserQueryRequest extends PageRequest implements Serializable {
     private static final long serialVersionUID = 1L;
 

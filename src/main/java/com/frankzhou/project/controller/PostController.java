@@ -4,9 +4,9 @@ import com.frankzhou.project.annotation.AuthCheck;
 import com.frankzhou.project.common.DeleteRequest;
 import com.frankzhou.project.common.PageResultDTO;
 import com.frankzhou.project.common.ResultDTO;
-import com.frankzhou.project.model.dto.post.PostAddRequest;
-import com.frankzhou.project.model.dto.post.PostQueryRequest;
-import com.frankzhou.project.model.dto.post.PostUpdateRequest;
+import com.frankzhou.project.model.dto.post.PostAddDTO;
+import com.frankzhou.project.model.dto.post.PostQueryDTO;
+import com.frankzhou.project.model.dto.post.PostUpdateDTO;
 import com.frankzhou.project.model.vo.PostVO;
 import com.frankzhou.project.service.PostService;
 import io.swagger.annotations.Api;
@@ -37,7 +37,7 @@ public class PostController {
 
     @ApiOperation(value = "【新增】单个新增帖子",notes = "单个帖子新增")
     @PostMapping("/add")
-    public ResultDTO<Long> addPost(@RequestBody PostAddRequest addRequest) {
+    public ResultDTO<Long> addPost(@RequestBody PostAddDTO addRequest) {
         return postService.insertPost(addRequest);
     }
 
@@ -56,26 +56,26 @@ public class PostController {
 
     @ApiOperation(value = "【更新】单个更新帖子",notes = "单个帖子更新")
     @PostMapping("/update")
-    public ResultDTO<Boolean> updatePost(@RequestBody PostUpdateRequest updateRequest) {
+    public ResultDTO<Boolean> updatePost(@RequestBody PostUpdateDTO updateRequest) {
         return postService.updatePost(updateRequest);
     }
 
     @ApiOperation(value = "【查询】单个查询帖子",notes = "单个帖子查询")
     @PostMapping("/get")
-    public ResultDTO<PostVO> getPost(@RequestBody PostQueryRequest queryRequest) {
+    public ResultDTO<PostVO> getPost(@RequestBody PostQueryDTO queryRequest) {
         return postService.getPostById(queryRequest);
     }
 
     @AuthCheck(mustRole = "admin")
     @ApiOperation(value = "【查询】批量查询帖子",notes = "批量帖子查询")
     @PostMapping("/list")
-    public ResultDTO<List<PostVO>> getPostList(@RequestBody PostQueryRequest queryRequest) {
+    public ResultDTO<List<PostVO>> getPostList(@RequestBody PostQueryDTO queryRequest) {
         return postService.getPostList(queryRequest);
     }
 
     @ApiOperation(value = "【查询】分页查询帖子",notes = "分页帖子查询")
     @PostMapping("/list/page")
-    public PageResultDTO<List<PostVO>> getPostByPage(@RequestBody PostQueryRequest queryRequest) {
+    public PageResultDTO<List<PostVO>> getPostByPage(@RequestBody PostQueryDTO queryRequest) {
         return postService.getPostByPage(queryRequest);
     }
 }

@@ -8,8 +8,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @EnableTransactionManagement
 @EnableSwagger2
-@SpringBootApplication
 @MapperScan("com.frankzhou.project.mapper")
+@SpringBootApplication
 public class DemoApplication {
 
 	public static void main(String[] args) {

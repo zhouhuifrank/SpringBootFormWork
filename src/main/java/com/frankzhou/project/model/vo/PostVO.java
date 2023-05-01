@@ -5,6 +5,8 @@ import lombok.Data;
 import java.io.Serializable;
 import java.util.Date;
 
+import java.util.List;
+
 /**
  * @author This.FrankZhou
  * @version 1.0
@@ -17,31 +19,15 @@ public class PostVO implements Serializable {
 
     private Long id;
 
-    private Integer age;
-
-    private Integer gender;
-
-    private String education;
-
-    private String place;
-
-    private String job;
-
-    private String contact;
-
-    private String loveExperience;
+    private String title;
 
     private String content;
 
-    private String photo;
+    private List<String> tags;
 
-    private Integer reviewStatus;
+    private Integer visitNum;
 
-    private String reviewMessage;
-
-    private Integer viewNum;
-
-    private Integer collectNum;
+    private Integer favourNum;
 
     private Integer thumbNum;
 
@@ -51,7 +37,9 @@ public class PostVO implements Serializable {
 
     private Date updateTime;
 
-    private Boolean hashCollect;
+    private UserVO user;
+
+    private Boolean hashFavour;
 
     private Boolean hasThumb;
 }
