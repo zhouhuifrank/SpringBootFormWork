@@ -59,3 +59,11 @@ mybatis-plus:
       logic-delete-value: 1 # 逻辑已删除值(默认为 1)
       logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
   mapper-locations: classpath:mapper/*.xml
+
+audience:
+  # Jwt的接收对象，存入audience
+  clientId: 098f64bcd4621d373cade4e832627b4f6
+  # 密钥，经过Base64加密
+  base64Secret: AIk4ZjZiY2Q0NjIxZDM3M2NhZGU0ZTgzMjYyN2I0ZjY=
+  # Jwt的签发主体，存入issuer
+  name: workhours

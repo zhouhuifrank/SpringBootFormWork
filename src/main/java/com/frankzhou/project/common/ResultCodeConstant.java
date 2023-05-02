@@ -36,6 +36,10 @@ public class ResultCodeConstant {
 
     public static final ResultCodeDTO DISTRIBUTED_LOCK_FAIL = new ResultCodeDTO(410,"distributed lock acquire fail","分布式锁获取失败");
 
+    public static final ResultCodeDTO TOKEN_GEN_FAIL = new ResultCodeDTO(411,"jwt token generate faile","token生成失败");
+
+    public static final ResultCodeDTO TOKEN_IS_EXPIRED = new ResultCodeDTO(412,"jwt token has expired","token过期失效");
+
     // 数据库相关错误码
 
     public static final ResultCodeDTO DB_QUERY_NO_DATA = new ResultCodeDTO(601,"database query no data","数据库查询无此数据");

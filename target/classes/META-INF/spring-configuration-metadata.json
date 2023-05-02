@@ -1,12 +1,33 @@
 {
   "groups": [
     {
+      "name": "audience",
+      "type": "com.frankzhou.project.config.AudienceConfig",
+      "sourceType": "com.frankzhou.project.config.AudienceConfig"
+    },
+    {
       "name": "spring.datasource",
       "type": "javax.sql.DataSource",
       "sourceType": "com.frankzhou.project.config.DruidConfig",
       "sourceMethod": "druidDatasource()"
     }
   ],
-  "properties": [],
+  "properties": [
+    {
+      "name": "audience.base64-secret",
+      "type": "java.lang.String",
+      "sourceType": "com.frankzhou.project.config.AudienceConfig"
+    },
+    {
+      "name": "audience.client-id",
+      "type": "java.lang.String",
+      "sourceType": "com.frankzhou.project.config.AudienceConfig"
+    },
+    {
+      "name": "audience.name",
+      "type": "java.lang.String",
+      "sourceType": "com.frankzhou.project.config.AudienceConfig"
+    }
+  ],
   "hints": []
 }
