@@ -15,21 +15,32 @@ import java.util.stream.Collectors;
 @Getter
 public enum PostReviewStatusEnum {
 
-    VERIFY_BEFORE(0,"待审核"),
-    VERIFY_PASS(1,"审核通过"),
-    VERIFY_FAIL(2,"审核失败");
+    VERIFY_BEFORE("CHECK_BEFORE","待审核"),
+    VERIFY_PASS("CHECK_SUCCESS","审核通过"),
+    VERIFY_FAIL("CHECK_FAIL","审核失败");
 
-    private final Integer code;
+    private final String value;
 
     private final String desc;
 
-    PostReviewStatusEnum(Integer code,String desc) {
-        this.code = code;
+    PostReviewStatusEnum(String value,String desc) {
+        this.value = value;
         this.desc = desc;
     }
 
-    public static List<Integer> getValues() {
-        List<Integer> statusValues = Arrays.stream(values()).map(PostReviewStatusEnum::getCode).collect(Collectors.toList());
+    public static List<String> getValues() {
+        List<String> statusValues = Arrays.stream(values()).map(PostReviewStatusEnum::getValue).collect(Collectors.toList());
         return statusValues;
+    }
+
+    public static PostReviewStatusEnum getEnumByValue(String value) {
+        PostReviewStatusEnum[] values = values();
+        for (PostReviewStatusEnum status : values) {
+            if (status.getValue().equals(value)) {
+                return status;
+            }
+        }
+
+        return null;
     }
 }

@@ -1,13 +1,10 @@
 package com.frankzhou.project.service.impl;
-import java.util.Date;
 import java.util.ArrayList;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.lang.TypeReference;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.HttpStatus;
 import cn.hutool.json.JSONArray;
-import cn.hutool.json.JSONNull;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -15,7 +12,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.frankzhou.project.common.*;
 import com.frankzhou.project.common.constant.OrderConstant;
 import com.frankzhou.project.common.constant.UserRoleConstant;
-import com.frankzhou.project.common.eunms.PostReviewStatusEnum;
 import com.frankzhou.project.common.exception.BusinessException;
 import com.frankzhou.project.mapper.PostFavourMapper;
 import com.frankzhou.project.mapper.PostMapper;
@@ -23,8 +19,7 @@ import com.frankzhou.project.mapper.PostThumbMapper;
 import com.frankzhou.project.model.dto.post.PostAddDTO;
 import com.frankzhou.project.model.dto.post.PostQueryDTO;
 import com.frankzhou.project.model.dto.post.PostUpdateDTO;
-import com.frankzhou.project.model.dto.user.UserDTO;
-import com.frankzhou.project.model.dto.user.UserQueryRequest;
+import com.frankzhou.project.model.dto.user.UserQueryDTO;
 import com.frankzhou.project.model.entity.Post;
 import com.frankzhou.project.model.entity.PostFavour;
 import com.frankzhou.project.model.entity.PostThumb;
@@ -81,11 +76,11 @@ public class PostServiceImpl implements PostService {
         }
 
         // 获取登录用户
-        ResultDTO<UserDTO> loginResult = userService.getLoginUser();
+        ResultDTO<UserVO> loginResult = userService.getLoginUser();
         if (loginResult.getResultCode() != HttpStatus.HTTP_OK) {
             return ResultDTO.getErrorResult(ResultCodeConstant.USER_NOT_LOGIN);
         }
-        UserDTO loginUser = loginResult.getData();
+        UserVO loginUser = loginResult.getData();
         if (ObjectUtil.isNotNull(loginUser)) {
             post.setUserId(loginUser.getId());
         } else {
@@ -116,11 +111,11 @@ public class PostServiceImpl implements PostService {
         }
 
         // 只有管理员和自己才能删除帖子
-        ResultDTO<UserDTO> loginResult = userService.getLoginUser();
+        ResultDTO<UserVO> loginResult = userService.getLoginUser();
         if (loginResult.getResultCode() != HttpStatus.HTTP_OK) {
             return ResultDTO.getErrorResult(ResultCodeConstant.USER_NOT_LOGIN);
         }
-        UserDTO loginUser = loginResult.getData();
+        UserVO loginUser = loginResult.getData();
         if (!post.getUserId().equals(loginUser.getId()) || !loginUser.getRole().equals(UserRoleConstant.ADMIN_ROLE)) {
             return ResultDTO.getErrorResult(ResultCodeConstant.NO_AUTH_ERROR);
         }
@@ -178,11 +173,11 @@ public class PostServiceImpl implements PostService {
         }
 
         // 只有管理员和作者本人可以更新
-        ResultDTO<UserDTO> loginResult = userService.getLoginUser();
+        ResultDTO<UserVO> loginResult = userService.getLoginUser();
         if (loginResult.getResultCode() != 200) {
             return ResultDTO.getErrorResult(ResultCodeConstant.USER_NOT_LOGIN);
         }
-        UserDTO loginUser = loginResult.getData();
+        UserVO loginUser = loginResult.getData();
         if (!post.getUserId().equals(loginUser.getId()) || !loginUser.getRole().equals(UserRoleConstant.ADMIN_ROLE)) {
             return ResultDTO.getErrorResult(ResultCodeConstant.NO_AUTH_ERROR);
         }
@@ -339,7 +334,7 @@ public class PostServiceImpl implements PostService {
         }
 
         // 封装用户信息
-        UserQueryRequest queryRequest = new UserQueryRequest();
+        UserQueryDTO queryRequest = new UserQueryDTO();
         queryRequest.setId(post.getUserId());
         ResultDTO<UserVO> userById = userService.getById(queryRequest);
         if (userById.getResultCode() == HttpStatus.HTTP_OK) {
@@ -347,9 +342,9 @@ public class PostServiceImpl implements PostService {
         }
 
         // 查询是否已经被点赞或者收藏(正在查看的用户)
-        ResultDTO<UserDTO> loginUserResult = userService.getLoginUser();
+        ResultDTO<UserVO> loginUserResult = userService.getLoginUser();
         if (loginUserResult.getResultCode() == HttpStatus.HTTP_OK) {
-            UserDTO user = loginUserResult.getData();
+            UserVO user = loginUserResult.getData();
             Long userId = user.getId();
             // 查找该用户是否点赞
             LambdaQueryWrapper<PostThumb> thumbWrapper = new LambdaQueryWrapper<>();

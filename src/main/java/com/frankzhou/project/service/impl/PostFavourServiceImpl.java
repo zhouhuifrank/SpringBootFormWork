@@ -15,10 +15,10 @@ import com.frankzhou.project.mapper.PostFavourMapper;
 import com.frankzhou.project.mapper.PostMapper;
 import com.frankzhou.project.model.dto.postFavour.PostFavourAddDTO;
 import com.frankzhou.project.model.dto.postFavour.PostFavourQueryDTO;
-import com.frankzhou.project.model.dto.user.UserDTO;
 import com.frankzhou.project.model.entity.Post;
 import com.frankzhou.project.model.entity.PostFavour;
 import com.frankzhou.project.model.vo.PostVO;
+import com.frankzhou.project.model.vo.UserVO;
 import com.frankzhou.project.redis.RedisKeys;
 import com.frankzhou.project.redis.StringRedisUtil;
 import com.frankzhou.project.service.PostFavourService;
@@ -71,11 +71,11 @@ public class PostFavourServiceImpl implements PostFavourService {
             return ResultDTO.getErrorResult(ResultCodeConstant.REQUEST_PARAM_ERROR);
         }
 
-        ResultDTO<UserDTO> loginUserResult = userService.getLoginUser();
+        ResultDTO<UserVO> loginUserResult = userService.getLoginUser();
         if (loginUserResult.getResultCode() != HttpStatus.HTTP_OK) {
             return ResultDTO.getErrorResult(ResultCodeConstant.USER_NOT_LOGIN);
         }
-        UserDTO user = loginUserResult.getData();
+        UserVO user = loginUserResult.getData();
         Long userId = user.getId();
         Long postId = favourAddDTO.getPostId();
 
@@ -164,11 +164,11 @@ public class PostFavourServiceImpl implements PostFavourService {
         }
 
         // 分页搜索出userId所收藏的帖子
-        ResultDTO<UserDTO> loginUserResult = userService.getLoginUser();
+        ResultDTO<UserVO> loginUserResult = userService.getLoginUser();
         if (loginUserResult.getResultCode() != HttpStatus.HTTP_OK) {
             return PageResultDTO.getErrorPageResult(ResultCodeConstant.USER_NOT_LOGIN);
         }
-        UserDTO user = loginUserResult.getData();
+        UserVO user = loginUserResult.getData();
         Long userId = user.getId();
 
         QueryWrapper<PostFavour> wrapper = new QueryWrapper<>();

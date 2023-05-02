@@ -1,6 +1,6 @@
 package com.frankzhou.project.common.util;
 
-import com.frankzhou.project.model.dto.user.UserDTO;
+import com.frankzhou.project.model.vo.UserVO;
 
 /**
  * @author This.FrankZhou
@@ -9,14 +9,14 @@ import com.frankzhou.project.model.dto.user.UserDTO;
  * @date 2023-04-09
  */
 public class UserHolder {
-    private static final ThreadLocal<UserDTO> tl = new ThreadLocal<>();
+    private static final ThreadLocal<UserVO> tl = new ThreadLocal<>();
 
-    public static UserDTO getUser() {
-        UserDTO userDTO = tl.get();
-        return userDTO;
+    public static UserVO getUser() {
+        UserVO UserVO = tl.get();
+        return UserVO;
     }
 
-    public static void setUser(UserDTO user) {
+    public static void setUser(UserVO user) {
         tl.set(user);
     }
 

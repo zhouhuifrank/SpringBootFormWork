@@ -9,7 +9,7 @@
             <result property="userName" column="user_name" jdbcType="VARCHAR"/>
             <result property="userAccount" column="user_account" jdbcType="VARCHAR"/>
             <result property="userAvatar" column="user_avatar" jdbcType="VARCHAR"/>
-            <result property="gender" column="gender" jdbcType="TINYINT"/>
+            <result property="gender" column="gender" jdbcType="VARCHAR"/>
             <result property="phone" column="phone" jdbcType="VARCHAR"/>
             <result property="email" column="email" jdbcType="VARCHAR"/>
             <result property="userRole" column="user_role" jdbcType="VARCHAR"/>
@@ -25,4 +25,44 @@
         email,user_role,user_password,
         create_time,update_time,is_delete
     </sql>
+
+    <sql id="WhereSql">
+        <where>
+            <if test="id != null">
+                id = #{id}
+            </if>
+            <if test="userName != null and userName != ''">
+                and user_name like concat('%',#{userName},'%')
+            </if>
+            <if test="userAccount != null and userAccount != ''">
+                and user_account = #{userAccount}
+            </if>
+            <if test="gender != null and gender != ''">
+                and gender = #{gender}
+            </if>
+            <if test="phone != null and phone != ''">
+                and phone = #{phone}
+            </if>
+            <if test="email != null and email != ''">
+                and email = #{email}
+            </if>
+            <if test="userRole != null and userRole != ''">
+                and user_role = #{userRole}
+            </if>
+            and is_delete = 0
+        </where>
+    </sql>
+
+
+    <select id="queryUserByCond" resultMap="UserMap">
+    </select>
+
+    <select id="queryUserByPage" resultMap="UserMap">
+    </select>
+
+    <insert id="batchInsert" parameterType="list">
+    </insert>
+
+    <update id="batchUpdate" parameterType="list">
+    </update>
 </mapper>

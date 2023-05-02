@@ -4,7 +4,6 @@ import com.frankzhou.project.annotation.AuthCheck;
 import com.frankzhou.project.common.ResultCodeConstant;
 import com.frankzhou.project.common.ResultDTO;
 import com.frankzhou.project.common.exception.BusinessException;
-import com.frankzhou.project.model.dto.user.UserDTO;
 import com.frankzhou.project.model.vo.UserVO;
 import com.frankzhou.project.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -48,13 +46,13 @@ public class AuthAspect {
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
         HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
 
-        ResultDTO<UserDTO> userResult = userService.getLoginUser();
+        ResultDTO<UserVO> userResult = userService.getLoginUser();
         if (userResult.getResultCode() != 200) {
             throw new BusinessException(ResultCodeConstant.DB_QUERY_NO_DATA);
         }
 
         // 校验权限
-        UserDTO loginUser = userResult.getData();
+        UserVO loginUser = userResult.getData();
         if (CollectionUtils.isNotEmpty(anyRoleList)) {
             String userRole = loginUser.getRole();
             // 拥有任意权限即可通过

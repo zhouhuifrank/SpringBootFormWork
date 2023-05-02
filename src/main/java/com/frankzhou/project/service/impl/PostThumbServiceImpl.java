@@ -3,15 +3,13 @@ package com.frankzhou.project.service.impl;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.HttpStatus;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.frankzhou.project.common.ResultCodeConstant;
 import com.frankzhou.project.common.ResultDTO;
 import com.frankzhou.project.common.exception.BusinessException;
 import com.frankzhou.project.mapper.PostMapper;
 import com.frankzhou.project.model.dto.postThumb.PostThumbAddDTO;
-import com.frankzhou.project.model.dto.user.UserDTO;
-import com.frankzhou.project.model.entity.Post;
 import com.frankzhou.project.model.entity.PostThumb;
+import com.frankzhou.project.model.vo.UserVO;
 import com.frankzhou.project.redis.RedisKeys;
 import com.frankzhou.project.redis.StringRedisUtil;
 import com.frankzhou.project.service.PostThumbService;
@@ -60,11 +58,11 @@ public class PostThumbServiceImpl implements PostThumbService {
             return ResultDTO.getErrorResult(ResultCodeConstant.REQUEST_PARAM_ERROR);
         }
 
-        ResultDTO<UserDTO> loginUserResult = userService.getLoginUser();
+        ResultDTO<UserVO> loginUserResult = userService.getLoginUser();
         if (loginUserResult.getResultCode() != HttpStatus.HTTP_OK) {
             return ResultDTO.getErrorResult(ResultCodeConstant.USER_NOT_LOGIN);
         }
-        UserDTO loginUser = loginUserResult.getData();
+        UserVO loginUser = loginUserResult.getData();
         Long userId = loginUser.getId();
         Long postId = thumbAddDTO.getPostId();
 

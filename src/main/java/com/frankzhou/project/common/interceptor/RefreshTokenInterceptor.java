@@ -2,17 +2,14 @@ package com.frankzhou.project.common.interceptor;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
-import com.frankzhou.project.common.ResultCodeConstant;
-import com.frankzhou.project.common.ResultDTO;
 import com.frankzhou.project.common.util.UserHolder;
-import com.frankzhou.project.model.dto.user.UserDTO;
+import com.frankzhou.project.model.vo.UserVO;
 import com.frankzhou.project.redis.RedisKeys;
 import com.frankzhou.project.redis.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.Nullable;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,8 +49,8 @@ public class RefreshTokenInterceptor implements HandlerInterceptor {
         }
 
         // 存入ThreadLocal中
-        UserDTO userDTO = BeanUtil.fillBeanWithMap(userMap, new UserDTO(), false);
-        UserHolder.setUser(userDTO);
+        UserVO UserVO = BeanUtil.fillBeanWithMap(userMap, new UserVO(), false);
+        UserHolder.setUser(UserVO);
 
         // 刷新token
         boolean isSuccess = redisUtil.setExpire(loginUserKey, RedisKeys.LOGIN_USER_TTL, TimeUnit.MINUTES);

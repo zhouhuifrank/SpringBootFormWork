@@ -1,18 +1,15 @@
 package com.frankzhou.project.common.util;
 
 import com.frankzhou.project.common.ResultCodeConstant;
-import com.frankzhou.project.common.ResultCodeDTO;
 import com.frankzhou.project.common.exception.BusinessException;
 import com.frankzhou.project.config.AudienceConfig;
 import com.frankzhou.project.model.entity.User;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.annotation.Resource;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 

@@ -12,7 +12,7 @@ import java.io.Serializable;
  * @date 2023-04-08
  */
 @Data
-public class UserQueryRequest extends PageRequest implements Serializable {
+public class UserQueryDTO extends PageRequest implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Long id;
@@ -21,7 +21,7 @@ public class UserQueryRequest extends PageRequest implements Serializable {
 
     private String userAccount;
 
-    private Integer gender;
+    private String gender;
 
     private String phone;
 

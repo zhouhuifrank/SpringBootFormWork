@@ -15,20 +15,31 @@ import java.util.stream.Collectors;
 @Getter
 public enum PostGenderStatusEnum {
 
-    MALE(0,"男"),
-    FEMALE(1,"女");
+    MALE("male","男"),
+    FEMALE("female","女");
 
-    private final Integer code;
+    private final String value;
 
     private final String desc;
 
-    PostGenderStatusEnum(Integer code,String desc) {
-        this.code = code;
+    PostGenderStatusEnum(String value,String desc) {
+        this.value = value;
         this.desc = desc;
     }
 
-    public static List<Integer> getValues() {
-        List<Integer> genderValues = Arrays.stream(values()).map(PostGenderStatusEnum::getCode).collect(Collectors.toList());
+    public static List<String> getValues() {
+        List<String> genderValues = Arrays.stream(values()).map(PostGenderStatusEnum::getValue).collect(Collectors.toList());
         return genderValues;
+    }
+
+    public static PostGenderStatusEnum getEnumByValue(String value) {
+        PostGenderStatusEnum[] values = values();
+        for (PostGenderStatusEnum status : values) {
+            if (status.getValue().equals(value)) {
+                return status;
+            }
+        }
+
+        return null;
     }
 }

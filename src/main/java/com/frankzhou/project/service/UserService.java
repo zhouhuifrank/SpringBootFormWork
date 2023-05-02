@@ -3,7 +3,6 @@ package com.frankzhou.project.service;
 import com.frankzhou.project.common.DeleteRequest;
 import com.frankzhou.project.common.PageResultDTO;
 import com.frankzhou.project.common.ResultDTO;
-import com.frankzhou.project.mapper.UserMapper;
 import com.frankzhou.project.model.dto.user.*;
 import com.frankzhou.project.model.vo.UserVO;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,33 +23,33 @@ public interface UserService {
 
     ResultDTO<String> sendCode(String phone);
 
-    ResultDTO<UserDTO> userCodeLogin(UserLoginRequest loginRequest);
+    ResultDTO<UserVO> userCodeLogin(UserLoginDTO loginDTO);
 
-    ResultDTO<Long> userRegister(UserRegisterRequest registerRequest);
+    ResultDTO<Long> userRegister(UserRegisterDTO registerDTO);
 
-    ResultDTO<UserDTO> userPasswordLogin(UserLoginRequest loginRequest);
+    ResultDTO<UserVO> userPasswordLogin(UserLoginDTO loginDTO);
 
-    ResultDTO<UserDTO> getLoginUser();
+    ResultDTO<UserVO> getLoginUser();
 
-    ResultDTO<Boolean> userLogout(HttpServletRequest httpServletRequest);
+    ResultDTO<Boolean> userLogout(HttpServletRequest request);
 
     // ===============后台方法=======================
 
-    ResultDTO<Boolean> updateById(UserUpdateRequest updateRequest);
+    ResultDTO<Boolean> updateById(UserUpdateDTO updateDTO);
 
-    ResultDTO<UserVO> getById(UserQueryRequest queryRequest);
+    ResultDTO<UserVO> getById(UserQueryDTO queryDTO);
 
     ResultDTO<Boolean> deleteById(DeleteRequest deleteRequest);
 
-    ResultDTO<Boolean> insertOne(UserAddRequest addRequest);
+    ResultDTO<Boolean> insertOne(UserAddDTO addDTO);
 
     ResultDTO<Boolean> batchDelete(DeleteRequest deleteRequest);
 
-    ResultDTO<List<UserVO>> getListByCond(UserQueryRequest queryRequest);
+    ResultDTO<List<UserVO>> getListByCond(UserQueryDTO queryDTO);
 
-    PageResultDTO<List<UserVO>> getPageListByCond(UserQueryRequest queryRequest);
+    PageResultDTO<List<UserVO>> getPageListByCond(UserQueryDTO queryDTO);
 
-    void userDownload(UserQueryRequest queryRequest, HttpServletResponse httpServletResponse);
+    void userDownload(UserQueryDTO queryDTO, HttpServletResponse response);
 
     ResultDTO<Boolean> userUpload(MultipartFile multipartFile);
 }

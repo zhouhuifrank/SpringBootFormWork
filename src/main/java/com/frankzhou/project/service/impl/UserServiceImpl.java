@@ -1,5 +1,4 @@
 package com.frankzhou.project.service.impl;
-import java.util.Date;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
@@ -57,20 +56,20 @@ public class UserServiceImpl implements UserService {
 
         // 生成验证码并存入redis
         String verifyCode = RandomUtil.randomNumbers(6);
-        redisUtil.setCacheString(RedisKeys.LOGIN_CODE_KEY+phone,verifyCode,RedisKeys.LOGIN_CODE_TTL, TimeUnit.MINUTES);
-        log.info("sendCode: 验证码发送成功:{}",verifyCode);
+        redisUtil.setCacheString(RedisKeys.LOGIN_CODE_KEY + phone, verifyCode, RedisKeys.LOGIN_CODE_TTL, TimeUnit.MINUTES);
+        log.info("sendCode: 验证码发送成功:{}", verifyCode);
 
         return ResultDTO.getSuccessResult(verifyCode);
     }
 
     @Override
-    public ResultDTO<UserDTO> userCodeLogin(UserLoginRequest loginRequest) {
-        if (ObjectUtil.isNull(loginRequest)) {
+    public ResultDTO<UserVO> userCodeLogin(UserLoginDTO loginDTO) {
+        if (ObjectUtil.isNull(loginDTO)) {
             return ResultDTO.getErrorResult(ResultCodeConstant.REQUEST_PARAM_ERROR);
         }
 
-        String phone = loginRequest.getPhone();
-        String code = loginRequest.getCode();
+        String phone = loginDTO.getPhone();
+        String code = loginDTO.getCode();
         if (StringUtils.isBlank(phone) || RegexUtils.phoneIsInvalid(phone)) {
             return ResultDTO.getErrorResult(ResultCodeConstant.PHONE_IS_INVALID);
         }
@@ -92,7 +91,7 @@ public class UserServiceImpl implements UserService {
 
         // 生成token存入redis中
         String token = UUID.fastUUID().toString();
-        UserDTO loginUser = new UserDTO();
+        UserVO loginUser = new UserVO();
         loginUser.setId(user.getId());
         loginUser.setUserName(user.getUserName());
         loginUser.setRole(user.getUserRole());
@@ -108,16 +107,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResultDTO<Long> userRegister(UserRegisterRequest registerRequest) {
-        if (ObjectUtil.isNull(registerRequest)) {
+    public ResultDTO<Long> userRegister(UserRegisterDTO registerDTO) {
+        if (ObjectUtil.isNull(registerDTO)) {
             return ResultDTO.getErrorResult(ResultCodeConstant.REQUEST_PARAM_ERROR);
         }
 
-        String userAccount = registerRequest.getUserAccount();
-        String userPassword = registerRequest.getUserPassword();
-        String confirmPassword = registerRequest.getConfirmPassword();
-        String phone = registerRequest.getPhone();
-        String userRole = registerRequest.getUserRole();
+        String userAccount = registerDTO.getUserAccount();
+        String userPassword = registerDTO.getUserPassword();
+        String confirmPassword = registerDTO.getConfirmPassword();
+        String phone = registerDTO.getPhone();
+        String userRole = registerDTO.getUserRole();
         if (StringUtils.isAnyBlank(userAccount,userPassword,confirmPassword)) {
             return ResultDTO.getErrorResult(ResultCodeConstant.REQUEST_PARAM_ERROR);
         }
@@ -164,13 +163,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResultDTO<UserDTO> userPasswordLogin(UserLoginRequest loginRequest) {
-        if (ObjectUtil.isNull(loginRequest)) {
+    public ResultDTO<UserVO> userPasswordLogin(UserLoginDTO loginDTO) {
+        if (ObjectUtil.isNull(loginDTO)) {
             return ResultDTO.getErrorResult(ResultCodeConstant.REQUEST_PARAM_ERROR);
         }
 
-        String password = loginRequest.getUserPassword();
-        String account = loginRequest.getUserAccount();
+        String password = loginDTO.getUserPassword();
+        String account = loginDTO.getUserAccount();
         if (StringUtils.isBlank(account)) {
             return ResultDTO.getErrorResult(ResultCodeConstant.REQUEST_PARAM_ERROR);
         }
@@ -196,11 +195,11 @@ public class UserServiceImpl implements UserService {
 
         // 生成token存入redis中
         String token = UUID.fastUUID().toString();
-        UserDTO loginUser = new UserDTO();
-        loginUser.setId(loginUser.getId());
-        loginUser.setUserName(loginUser.getUserName());
-        loginUser.setRole(loginUser.getRole());
-        loginUser.setPhone(loginUser.getPhone());
+        UserVO loginUser = new UserVO();
+        loginUser.setId(dbUser.getId());
+        loginUser.setUserName(dbUser.getUserName());
+        loginUser.setRole(dbUser.getUserRole());
+        loginUser.setPhone(dbUser.getPhone());
         String loginUserKey = RedisKeys.LOGIN_USER_KEY + token;
         // 对象转map
         Map<String, Object> loginUserMap = BeanUtil.beanToMap(loginUser, new HashMap<>(),
@@ -212,16 +211,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResultDTO<UserDTO> getLoginUser() {
+    public ResultDTO<UserVO> getLoginUser() {
         // 从ThreadLocal中拿到当前登录的用户
-        UserDTO user = UserHolder.getUser();
+        UserVO user = UserHolder.getUser();
         return ResultDTO.getSuccessResult(user);
     }
 
     @Override
-    public ResultDTO<Boolean> userLogout(HttpServletRequest httpServletRequest) {
+    public ResultDTO<Boolean> userLogout(HttpServletRequest request) {
         // 注销只需要将redis中的用户信息删除即可
-        String token = httpServletRequest.getHeader("authorization");
+        String token = request.getHeader("authorization");
         if (StringUtils.isBlank(token)) {
             return ResultDTO.getErrorResult(ResultCodeConstant.TOKEN_NOT_EXISTED);
         }
@@ -231,13 +230,57 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResultDTO<Boolean> updateById(UserUpdateRequest updateRequest) {
+    public ResultDTO<Boolean> updateById(UserUpdateDTO updateDTO) {
+        if (ObjectUtil.isNull(updateDTO) || updateDTO.getId() <= 0) {
+            return ResultDTO.getErrorResult(ResultCodeConstant.REQUEST_PARAM_ERROR);
+        }
+
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(User::getId,updateDTO.getId())
+                .eq(User::getIsDelete,0);
+        User oneById = userMapper.selectOne(wrapper);
+        if (ObjectUtil.isNull(oneById)) {
+            return ResultDTO.getErrorResult(ResultCodeConstant.DB_QUERY_NO_DATA);
+        }
+
+        // 校验参数
+        if (StringUtils.isBlank(updateDTO.getPhone()) || RegexUtils.phoneIsInvalid(updateDTO.getPhone())) {
+            return ResultDTO.getErrorResult(ResultCodeConstant.PHONE_IS_INVALID);
+        }
+
+        if (StringUtils.isNotBlank(updateDTO.getUserRole())) {
+
+        }
+
+        User user = new User();
+        // userAccount不能修改
+        user.setUserAccount(oneById.getUserAccount());
+
+
         return null;
     }
 
     @Override
-    public ResultDTO<UserVO> getById(UserQueryRequest queryRequest) {
-        return null;
+    public ResultDTO<UserVO> getById(UserQueryDTO queryDTO) {
+        if (ObjectUtil.isNull(queryDTO) || queryDTO.getId() <= 0) {
+            return ResultDTO.getErrorResult(ResultCodeConstant.REQUEST_PARAM_ERROR);
+        }
+
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(User::getId,queryDTO.getId())
+                .eq(User::getIsDelete,0);
+        User oneById = userMapper.selectOne(wrapper);
+        if (ObjectUtil.isNull(oneById)) {
+            return ResultDTO.getErrorResult(ResultCodeConstant.DB_QUERY_NO_DATA);
+        }
+
+        UserVO userVO = new UserVO();
+        userVO.setId(oneById.getId());
+        userVO.setUserName(oneById.getUserName());
+        userVO.setPhone(oneById.getPhone());
+        userVO.setRole(oneById.getUserRole());
+
+        return ResultDTO.getSuccessResult(userVO);
     }
 
     @Override
@@ -246,7 +289,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResultDTO<Boolean> insertOne(UserAddRequest addRequest) {
+    public ResultDTO<Boolean> insertOne(UserAddDTO addDTO) {
         return null;
     }
 
@@ -256,17 +299,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResultDTO<List<UserVO>> getListByCond(UserQueryRequest queryRequest) {
+    public ResultDTO<List<UserVO>> getListByCond(UserQueryDTO queryDTO) {
         return null;
     }
 
     @Override
-    public PageResultDTO<List<UserVO>> getPageListByCond(UserQueryRequest queryRequest) {
+    public PageResultDTO<List<UserVO>> getPageListByCond(UserQueryDTO queryDTO) {
         return null;
     }
 
     @Override
-    public void userDownload(UserQueryRequest queryRequest, HttpServletResponse httpServletResponse) {
+    public void userDownload(UserQueryDTO queryDTO, HttpServletResponse response) {
 
     }
 
@@ -274,4 +317,5 @@ public class UserServiceImpl implements UserService {
     public ResultDTO<Boolean> userUpload(MultipartFile multipartFile) {
         return null;
     }
+
 }

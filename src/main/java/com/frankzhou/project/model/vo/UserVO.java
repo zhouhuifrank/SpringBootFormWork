@@ -19,19 +19,8 @@ public class UserVO implements Serializable {
 
     private String userName;
 
-    private String userAccount;
-
-    private String userAvatar;
-
-    private Integer gender;
-
     private String phone;
 
-    private String email;
+    private String role;
 
-    private String userRole;
-
-    private Date createTime;
-
-    private Date updateTime;
 }
