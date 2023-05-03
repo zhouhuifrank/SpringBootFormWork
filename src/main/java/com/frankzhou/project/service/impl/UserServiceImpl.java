@@ -6,15 +6,24 @@ import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
+import cn.hutool.http.HttpStatus;
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelReader;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.read.metadata.ReadSheet;
+import com.alibaba.excel.write.metadata.WriteSheet;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.frankzhou.project.common.*;
 import com.frankzhou.project.common.constant.UserRoleConstant;
-import com.frankzhou.project.common.util.PasswordEncoder;
-import com.frankzhou.project.common.util.RegexUtils;
-import com.frankzhou.project.common.util.UserHolder;
+import com.frankzhou.project.common.exception.BusinessException;
+import com.frankzhou.project.common.util.*;
+import com.frankzhou.project.manager.UserManager;
 import com.frankzhou.project.mapper.UserMapper;
 import com.frankzhou.project.model.dto.user.*;
 import com.frankzhou.project.model.entity.User;
+import com.frankzhou.project.model.excel.dto.UserExcelDTO;
+import com.frankzhou.project.model.excel.listener.UserExcelListener;
 import com.frankzhou.project.model.vo.UserVO;
 import com.frankzhou.project.redis.RedisKeys;
 import com.frankzhou.project.redis.RedisUtil;
@@ -27,10 +36,15 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * @author This.FrankZhou
@@ -44,6 +58,9 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private UserManager userManager;
 
     @Resource
     private RedisUtil redisUtil;
@@ -285,37 +302,137 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResultDTO<Boolean> deleteById(DeleteRequest deleteRequest) {
-        return null;
+        return userManager.deleteById(deleteRequest);
     }
 
     @Override
     public ResultDTO<Boolean> insertOne(UserAddDTO addDTO) {
-        return null;
+        return userManager.insertOne(addDTO);
     }
 
     @Override
     public ResultDTO<Boolean> batchDelete(DeleteRequest deleteRequest) {
-        return null;
+        return userManager.batchDelete(deleteRequest);
     }
 
     @Override
     public ResultDTO<List<UserVO>> getListByCond(UserQueryDTO queryDTO) {
-        return null;
+        return userManager.getListByCond(queryDTO);
     }
 
     @Override
     public PageResultDTO<List<UserVO>> getPageListByCond(UserQueryDTO queryDTO) {
-        return null;
+        return userManager.getPageListByCond(queryDTO);
     }
 
     @Override
     public void userDownload(UserQueryDTO queryDTO, HttpServletResponse response) {
+        List<User> userList = userMapper.queryListByCond(queryDTO);
+        List<UserExcelDTO> resData = new ArrayList<>();
+        for (User targetDo : userList) {
+            UserExcelDTO excelDTO = new UserExcelDTO();
+            BeanUtil.copyProperties(targetDo,excelDTO);
+            resData.add(excelDTO);
+        }
 
+        try {
+            // 获取表头
+            List<List<String>> headList = new ArrayList<>();
+            for (String str : UserExcelListener.headerCn) {
+                headList.add(ListUtil.singletonList(str));
+            }
+
+            try {
+                String fileName = URLEncoder.encode("用户信息表_" + DateUtil.getCurrentDate(), StandardCharsets.UTF_8.name());
+                response.setHeader("Content-Type" , "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                response.setHeader("Content-Disposition" , "attachment");
+                response.setHeader("fileName" , fileName + ".xlsx");
+                response.setHeader("Access-Control-Expose-Headers" , "FileName");
+            } catch (UnsupportedEncodingException e) {
+                log.error("excel下载出错: {}",e.getMessage());
+                throw new BusinessException("Excel下载出错");
+            }
+
+            // 写入Excel
+            OutputStream out = response.getOutputStream();
+            ExcelWriter excelWriter = EasyExcel.write(out).build();
+            WriteSheet writeSheet = EasyExcel.writerSheet("用户信息表").head(headList).build();
+            excelWriter.write(resData,writeSheet);
+            excelWriter.finish();
+            out.flush();
+            out.close();
+        } catch (IOException e) {
+            log.error("method exportExcel occur IOException");
+        }
     }
 
     @Override
-    public ResultDTO<Boolean> userUpload(MultipartFile multipartFile) {
-        return null;
+    public ResultDTO<Boolean> userUpload(MultipartFile dataFile) {
+        List<UserVO> dataList = new ArrayList<>();
+        try {
+            // 读取Excel表格
+            InputStream inputStream = dataFile.getInputStream();
+            ExcelReader excelReader = EasyExcel.read(inputStream).build();
+            UserExcelListener listener = new UserExcelListener();
+            ReadSheet readSheet = EasyExcel.readSheet(0)
+                    .head(UserExcelDTO.class)
+                    .registerReadListener(listener).build();
+            excelReader.read(readSheet);
+            // 校验表头
+            Map<Integer, String> headerMap = listener.getHeaderMap();
+            Set<Integer> keys = headerMap.keySet();
+            if (keys.size() >= 1) {
+                return ResultDTO.getResult(new ResultCodeDTO(91132,"import excel header error",
+                        "excel表头不匹配"));
+            }
+            dataList = listener.getDataList();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        // excel表格内容校验
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(User::getIsDelete,0);
+        List<User> userList = userMapper.selectList(wrapper);
+
+        // userAccount不能重复
+        Set<String> accountSet = userList.stream().map(User::getUserAccount).collect(Collectors.toSet());
+        List<UserAddDTO> insertList = new ArrayList<>();
+        List<UserUpdateDTO> updateList = new ArrayList<>();
+        for (UserVO user : dataList) {
+            if (StringUtils.isBlank(user.getUserAccount())) {
+                return ResultDTO.getErrorResult(new ResultCodeDTO(91132,"user account is not blank",
+                        "账号名不能为空"));
+            }
+
+            if (StringUtils.isBlank(user.getRole())) {
+                return ResultDTO.getErrorResult(new ResultCodeDTO(91133,"user role is not null",
+                        "用户权限不能为空"));
+            }
+
+            if (accountSet.contains(user.getUserAccount())) {
+                UserUpdateDTO updateDTO = new UserUpdateDTO();
+                BeanUtil.copyProperties(user,updateDTO);
+                updateList.add(updateDTO);
+            } else {
+                UserAddDTO addDTO = new UserAddDTO();
+                BeanUtil.copyProperties(user,addDTO);
+                insertList.add(addDTO);
+            }
+        }
+
+        // 插入数据库
+        ResultDTO<Boolean> insertResult = userManager.batchInsert(insertList);
+        if (insertResult.getResultCode() != HttpStatus.HTTP_OK) {
+            return insertResult;
+        }
+
+        ResultDTO<Boolean> updateResult = userManager.batchUpdate(updateList);
+        if (updateResult.getResultCode() != HttpStatus.HTTP_OK) {
+            return updateResult;
+        }
+
+        return ResultDTO.getSuccessResult(Boolean.TRUE);
     }
 
 }

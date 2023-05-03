@@ -9,7 +9,7 @@
             <result property="userName" column="user_name" jdbcType="VARCHAR"/>
             <result property="userAccount" column="user_account" jdbcType="VARCHAR"/>
             <result property="userAvatar" column="user_avatar" jdbcType="VARCHAR"/>
-            <result property="gender" column="gender" jdbcType="TINYINT"/>
+            <result property="gender" column="gender" jdbcType="VARCHAR"/>
             <result property="phone" column="phone" jdbcType="VARCHAR"/>
             <result property="email" column="email" jdbcType="VARCHAR"/>
             <result property="userRole" column="user_role" jdbcType="VARCHAR"/>
@@ -25,4 +25,173 @@
         email,user_role,user_password,
         create_time,update_time,is_delete
     </sql>
+
+    <sql id="WhereSql">
+        <where>
+            <if test="id != null">
+                id = #{id}
+            </if>
+            <if test="userName != null and userName != ''">
+                and user_name like concat('%',#{userName},'%')
+            </if>
+            <if test="userAccount != null and userAccount != ''">
+                and user_account = #{userAccount}
+            </if>
+            <if test="gender != null and gender != ''">
+                and gender = #{gender}
+            </if>
+            <if test="phone != null and phone != ''">
+                and phone = #{phone}
+            </if>
+            <if test="email != null and email != ''">
+                and email = #{email}
+            </if>
+            <if test="userRole != null and userRole != ''">
+                and user_role = #{userRole}
+            </if>
+            and is_delete = 0
+        </where>
+    </sql>
+
+    <sql id="OrderSql">
+        <if test="orderBy != null and orderBy != ''">
+            order by
+            #{orderBy}
+            <if test="sort == 'DESC'">
+                DESC
+            </if>
+        </if>
+    </sql>
+
+    <select id="queryListByCond" parameterType="com.frankzhou.project.model.dto.user.UserQueryDTO" resultMap="UserMap">
+        select
+        <include refid="BaseColumn"/>
+        from user
+        <include refid="WhereSql"/>
+        <include refid="OrderSql"/>
+    </select>
+
+    <select id="queryListByPage" parameterType="com.frankzhou.project.model.dto.user.UserQueryDTO" resultMap="UserMap">
+        select
+        <include refid="BaseColumn"/>
+        from user
+        <include refid="WhereSql"/>
+        <include refid="OrderSql"/>
+        limit #{startRow},#{pageSize}
+    </select>
+
+    <select id="queryPageCount" parameterType="com.frankzhou.project.model.dto.user.UserQueryDTO" resultType="java.lang.Integer">
+        select
+        count(*)
+        from user
+        <include refid="WhereSql"/>
+    </select>
+
+    <insert id="batchInsert" parameterType="list">
+        insert into user
+        (<include refid="BaseColumn"/>)
+        values
+        <foreach collection="list" item="target" index="index" separator=",">
+            (
+             #{target.userName},
+             #{target.userAccount},
+             #{target.userAvatar},
+             #{target.gender},
+             #{target.phone},
+             #{target.email},
+             #{target.userRole},
+             #{target.userPassword}
+            )
+        </foreach>
+    </insert>
+
+    <update id="batchUpdate" parameterType="list">
+        update user
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="user_name = case" suffix="end,">
+                <foreach collection="list" item="target" index="index">
+                    <if test="target.userName != null and target.userName != ''">
+                        when id = #{id}
+                        then #{target.userName}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="user_account = case" suffix="end,">
+                <foreach collection="list" item="target" index="index">
+                    <if test="target.userAccount != null and target.userAccount != ''">
+                        when id = #{od}
+                        then #{target.userAccount}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="user_avatar = case" suffix="end,">
+                <foreach collection="list" item="target" index="index">
+                    <if test="target.userAvatar != null and target.userAvatar != ''">
+                        when id = #{id}
+                        then #{target.userAvatar}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="gender = case" suffix="end,">
+                <foreach collection="list" item="target" index="index">
+                    <if test="target.gender != null and target.gender != ''">
+                        when id = #{id}
+                        then #{target.gender}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="phone = case" suffix="end,">
+                <foreach collection="list" item="target" index="index">
+                    <if test="target.phone != null and target.phone != ''">
+                        when id = #{id}
+                        then #{target.phone}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="email = case" suffix="end,">
+                <foreach collection="list" item="target" index="index">
+                    <if test="target.email != null and target.email != ''">
+                        when id = #{id}
+                        then #{target.email}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="user_role = case" suffix="end,">
+                <foreach collection="list" item="target" index="index">
+                    <if test="target.userRole != null and target.userRole != ''">
+                        when id = #{id}
+                        then #{target.userRole}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="user_password = case" suffix="end,">
+                <foreach collection="list" item="target" index="index">
+                    <if test="target.userPassword != null and target.userPassword != ''">
+                        when id = #{id}
+                        then #{target.userPassword}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        where
+        is_delete = 0
+        and id in
+        <foreach collection="list" item="target" open="(" separator="," close=")">
+            #{target.id}
+        </foreach>
+    </update>
+
+    <update id="batchDelete" parameterType="list">
+        update user
+        set
+        is_delete = 1
+        where
+        is_delete = 0
+        <if test="ids != null and ids.length > 0">
+            and id in
+            <foreach collection="ids" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </update>
 </mapper>
