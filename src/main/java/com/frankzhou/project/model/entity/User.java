@@ -37,7 +37,7 @@ public class User implements Serializable {
     private String userAvatar;
 
     @TableField(value = "gender")
-    private Integer gender;
+    private String gender;
 
     @TableField(value = "phone")
     private String phone;

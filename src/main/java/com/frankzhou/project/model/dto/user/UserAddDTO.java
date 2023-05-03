@@ -1,5 +1,7 @@
 package com.frankzhou.project.model.dto.user;
 
+import lombok.Data;
+
 import java.io.Serializable;
 
 /**
@@ -8,6 +10,7 @@ import java.io.Serializable;
  * @description 用户新增请求类
  * @date 2023-04-08
  */
+@Data
 public class UserAddDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 

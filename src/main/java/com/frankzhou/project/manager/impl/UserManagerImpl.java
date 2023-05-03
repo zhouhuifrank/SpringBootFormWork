@@ -9,6 +9,7 @@ import com.frankzhou.project.common.ResultCodeConstant;
 import com.frankzhou.project.common.ResultDTO;
 import com.frankzhou.project.common.constant.OrderConstant;
 import com.frankzhou.project.common.exception.BusinessException;
+import com.frankzhou.project.common.util.ListUtil;
 import com.frankzhou.project.manager.UserManager;
 import com.frankzhou.project.mapper.UserMapper;
 import com.frankzhou.project.model.dto.user.UserAddDTO;
@@ -16,8 +17,10 @@ import com.frankzhou.project.model.dto.user.UserQueryDTO;
 import com.frankzhou.project.model.dto.user.UserUpdateDTO;
 import com.frankzhou.project.model.entity.User;
 import com.frankzhou.project.model.vo.UserVO;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -25,9 +28,11 @@ import java.util.*;
 /**
  * @author This.FrankZhou
  * @version 1.0
- * @description
+ * @description service通用能力复用实现类(代码生成器)
  * @date 2023-05-02
  */
+@Slf4j
+@Component
 public class UserManagerImpl implements UserManager {
 
     @Resource
@@ -40,7 +45,8 @@ public class UserManagerImpl implements UserManager {
         }
 
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<User>();
-        wrapper.eq(User::getId,queryDTO.getId()).eq(User::getIsDelete,0);
+        wrapper.eq(User::getId,queryDTO.getId())
+                .eq(User::getIsDelete,0);
         User oneById = userMapper.selectOne(wrapper);
         if (ObjectUtil.isNull(oneById)) {
             return ResultDTO.getErrorResult(ResultCodeConstant.DB_QUERY_NO_DATA);
@@ -59,7 +65,8 @@ public class UserManagerImpl implements UserManager {
         }
 
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<User>();
-        wrapper.eq(User::getId,updateDTO.getId()).eq(User::getIsDelete,0);
+        wrapper.eq(User::getId,updateDTO.getId())
+                .eq(User::getIsDelete,0);
         User oneById = userMapper.selectOne(wrapper);
         if (ObjectUtil.isNull(oneById)) {
             return ResultDTO.getErrorResult(ResultCodeConstant.DB_QUERY_NO_DATA);
@@ -118,7 +125,19 @@ public class UserManagerImpl implements UserManager {
             return ResultDTO.getErrorResult(ResultCodeConstant.REQUEST_PARAM_ERROR);
         }
 
-        return null;
+        String ids = deleteRequest.getIds();
+        String[] idArray = ids.split(",");
+        List<Long> idList = new ArrayList<>();
+        for (String str : idArray) {
+            idList.add(Long.valueOf(str));
+        }
+
+        Integer deleteCount = userMapper.batchDelete(idList);
+        if (deleteCount != idList.size()) {
+            return ResultDTO.getErrorResult(ResultCodeConstant.DB_DELETE_COUNT_ERROR);
+        }
+
+        return ResultDTO.getSuccessResult(Boolean.TRUE);
     }
 
     @Override
@@ -127,7 +146,13 @@ public class UserManagerImpl implements UserManager {
             return ResultDTO.getErrorResult(ResultCodeConstant.REQUEST_PARAM_ERROR);
         }
 
-        return null;
+        List<User> userList = ListUtil.listConvert(addDTOList, User.class);
+        Integer insertCount = userMapper.batchInsert(userList);
+        if (insertCount != userList.size()) {
+            return ResultDTO.getErrorResult(ResultCodeConstant.DB_INSERT_COUNT_ERROR);
+        }
+
+        return ResultDTO.getSuccessResult(Boolean.TRUE);
     }
 
     @Override
@@ -136,7 +161,13 @@ public class UserManagerImpl implements UserManager {
             return ResultDTO.getErrorResult(ResultCodeConstant.REQUEST_PARAM_ERROR);
         }
 
-        return null;
+        List<User> userList = ListUtil.listConvert(updateDTOList, User.class);
+        Integer updateCount = userMapper.batchUpdate(userList);
+        if (updateCount != userList.size()) {
+            return ResultDTO.getErrorResult(ResultCodeConstant.DB_UPDATE_COUNT_ERROR);
+        }
+
+        return ResultDTO.getSuccessResult(Boolean.TRUE);
     }
 
     @Override
@@ -145,17 +176,13 @@ public class UserManagerImpl implements UserManager {
             return ResultDTO.getErrorResult(ResultCodeConstant.REQUEST_PARAM_ERROR);
         }
 
-        List<User> userList = userMapper.queryUserByCond(queryDTO);
+        List<User> userList = userMapper.queryListByCond(queryDTO);
         List<UserVO> userVOList = new ArrayList<>();
         if (userList.size() == 0) {
             return ResultDTO.getSuccessResult(userVOList);
         }
 
-        userList.forEach(bean -> {
-            UserVO userVo = new UserVO();
-            BeanUtil.copyProperties(bean,userVo);
-            userVOList.add(userVo);
-        });
+        userVOList = ListUtil.listConvert(userList, UserVO.class);
 
         return ResultDTO.getSuccessResult(userVOList);
     }
@@ -172,6 +199,7 @@ public class UserManagerImpl implements UserManager {
         String sort = queryDTO.getSort();
 
         if (ObjectUtil.isNull(currPage)) {
+            // 这里必须要替换成开始行数 startRow = (currPage-1)*pageSize
             queryDTO.setCurrPage(1);
         }
         if (ObjectUtil.isNull(pageSize)) {
@@ -181,23 +209,24 @@ public class UserManagerImpl implements UserManager {
             queryDTO.setOrderBy("update_time");
         }
         if (StringUtils.isBlank(sort)) {
-            queryDTO.setSort(OrderConstant.SORT_ORDER_DESC);
+            queryDTO.setSort(OrderConstant.SORT_ORDER_ASC);
         }
 
+        // 防止爬虫
         if (pageSize > 100) {
             throw new BusinessException(ResultCodeConstant.REQUEST_PARAM_ERROR);
         }
 
-        List<User> userList = userMapper.queryUserByCond(queryDTO);
+        // 设置行数
+        queryDTO.setStartRow((queryDTO.getCurrPage()-1)*queryDTO.getPageSize());
+        Integer totalCount = userMapper.queryPageCount(queryDTO);
         List<UserVO> userVOList = new ArrayList<>();
-        if (userList.size() == 0) {
+        if (totalCount == 0) {
             return PageResultDTO.getSuccessPageResult(0,userVOList);
         }
-        userList.forEach(bean -> {
-            UserVO userVo = new UserVO();
-            BeanUtil.copyProperties(bean,userVo);
-            userVOList.add(userVo);
-        });
+
+        List<User> userList = userMapper.queryListByPage(queryDTO);
+        userVOList = ListUtil.listConvert(userList, UserVO.class);
 
         return PageResultDTO.getSuccessPageResult(userList.size(),userVOList);
     }

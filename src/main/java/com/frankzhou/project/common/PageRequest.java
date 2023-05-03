@@ -15,12 +15,17 @@ public class PageRequest implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 当前页数
+     * 当前页数(前端)
      */
     private Integer currPage;
 
     /**
-     * 页面大小
+     * 开始行数(后端)
+     */
+    private Integer startRow;
+
+    /**
+     * 页面大小(前端+后端)
      */
     private Integer pageSize;
 
