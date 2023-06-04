@@ -14,12 +14,12 @@ import java.lang.annotation.*;
 public @interface WhiteList {
 
     /**
-     * 关键字段
+     * 接口入参需要提取的属性
      */
     String key() default "";
 
     /**
-     * 拦截时返回的json
+     * 拦截时返回给用户的json
      */
     String returnJson() default "";
 }
