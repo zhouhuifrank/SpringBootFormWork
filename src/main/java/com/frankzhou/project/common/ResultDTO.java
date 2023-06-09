@@ -53,8 +53,8 @@ public class ResultDTO<T> implements Serializable {
     public static <T> ResultDTO<T> getResult(ResultCodeDTO resultCodeDTO) {
         ResultDTO<T> result = new ResultDTO<>();
         result.setResultCode(resultCodeDTO.getCode());
-        result.setError(result.getError());
-        result.setErrorMsg(result.getErrorMsg());
+        result.setError(resultCodeDTO.getMessage());
+        result.setErrorMsg(resultCodeDTO.getMessageInfo());
         result.isSuccess = false;
 
         return result;

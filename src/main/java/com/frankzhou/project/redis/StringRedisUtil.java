@@ -115,6 +115,7 @@ public class StringRedisUtil {
 
     public <T> T getStringObject(String key,Class<T> clazz) {
         try {
+            // 不能直接转，需要判断是否存在，否则有NPE
             String json = stringRedisTemplate.opsForValue().get(key);
             T result = BeanUtil.toBean(json, clazz);
             return result;
