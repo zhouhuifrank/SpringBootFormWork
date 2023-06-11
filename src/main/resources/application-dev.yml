@@ -67,3 +67,7 @@ audience:
   base64Secret: AIk4ZjZiY2Q0NjIxZDM3M2NhZGU0ZTgzMjYyN2I0ZjY=
   # Jwt的签发主体，存入issuer
   name: workhours
+
+# 白名单配置
+whitelist:
+  users: zhouhui,xintong
