@@ -8,5 +8,6 @@ package com.frankzhou.project.common.constant;
  */
 public interface ErrorConstant {
 
-    String LOCK_LIMIT = "请求太过频繁，请稍后再试";
+    String LOCK_LIMIT = "服务繁忙，请稍后再试";
+    String FREQUENCY_LIMIT = "请求太过频繁，请稍后再试";
 }
