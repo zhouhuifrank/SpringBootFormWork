@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
  * @date 2023-06-03
  */
 @Documented
+@Repeatable(FrequencyLimitContainer.class)
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FrequencyLimit {

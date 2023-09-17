@@ -3,9 +3,6 @@ package com.frankzhou.project.service;
 import com.frankzhou.project.common.DeleteRequest;
 import com.frankzhou.project.common.ResultDTO;
 import com.frankzhou.project.model.dto.catalog.CatalogDTO;
-import com.frankzhou.project.model.dto.catalog.TreeNode;
-
-import java.util.List;
 
 /**
  * @author This.FrankZhou

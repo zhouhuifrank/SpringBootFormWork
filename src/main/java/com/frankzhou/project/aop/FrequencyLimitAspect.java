@@ -1,10 +1,13 @@
 package com.frankzhou.project.aop;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.frankzhou.project.annotation.FrequencyLimit;
-import com.frankzhou.project.common.constant.ErrorConstant;
+import com.frankzhou.project.common.ResultCodeDTO;
 import com.frankzhou.project.common.exception.BusinessException;
 import com.frankzhou.project.common.util.SpELUtil;
+import com.frankzhou.project.model.common.FrequencyLimitDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -25,6 +28,7 @@ import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -50,61 +54,59 @@ public class FrequencyLimitAspect {
     @Around("aopPoint()")
     public Object doFrequencyLimit(ProceedingJoinPoint jp) throws Throwable {
         Method method = getMethod(jp);
-        FrequencyLimit[] frequencyLimits = method.getAnnotationsByType(FrequencyLimit.class);
-        // 可能有多个频控注解，遍历将key和对应注解存入map中
-        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
-        Map<String,FrequencyLimit> annotationMap = new HashMap<>();
-        for (int i=0;i<frequencyLimits.length;i++) {
-            FrequencyLimit frequencyLimit = frequencyLimits[i];
-            // 如果不设置prefix，那么就默认用方法全限定名 可能有多个注解prefix=方法全限定名+注解排名
-            String prefix = StringUtils.isBlank(frequencyLimit.prefixKey()) ? SpELUtil.getMethodKey(method) + "index:" + i : frequencyLimit.prefixKey();
+        FrequencyLimit[] annotationArray = method.getAnnotationsByType(FrequencyLimit.class);
+
+        // key -> redis中的key value -> key对应的FrequencyLimit注解
+        Map<String, FrequencyLimit> frequencyLimitMap = new ConcurrentHashMap<>();
+        for (int i=0;i<annotationArray.length;i++) {
+            FrequencyLimit item = annotationArray[i];
+            String prefix = StringUtils.isNotBlank(item.prefixKey()) ? item.prefixKey() : SpELUtil.getMethodKey(method);
             String key = "";
-            switch (frequencyLimit.target()) {
-                case UID:
-                    // 使用TokenUtil从token中解析出UID
-                    break;
-                case IP:
-                    key = getHostIpAddress(request);
-                    break;
-                case URL:
-                    key = getUrl(request);
-                    break;
-                case EL:
-                    String springEl = frequencyLimit.spEl();
-                    if (StringUtils.isNotBlank(springEl)) {
-                        key = SpELUtil.parseSpEl(method,jp.getArgs(),springEl);
-                    }
+            if (item.target().equals(FrequencyLimit.Target.UID)) {
+                // 从token中获取
+                key = "frankzhou";
+            } else if (item.target().equals(FrequencyLimit.Target.IP)) {
+                RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+                HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
+                key = getHostIpAddress(request);
+            } else if (item.target().equals(FrequencyLimit.Target.URL)) {
+                RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+                HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
+                key = getUrl(request);
+            } else if (item.target().equals(FrequencyLimit.Target.EL)) {
+                key = SpELUtil.parseSpEl(method,jp.getArgs(),item.spEl());
             }
 
-            String redisKey = prefix;
-            if (StringUtils.isNotBlank(key)) {
-                redisKey += ":" + key;
-            }
-            annotationMap.put(redisKey,frequencyLimit);
+            String redisKey = prefix + "index:" + i + ":" + key;
+            frequencyLimitMap.put(redisKey, item);
         }
 
-        // 批量获取redis中的统计值
-        List<String> keyList = new ArrayList<>(annotationMap.keySet());
-        List<Integer> countList = multiGetCache(keyList, Integer.class);
-        for (int i=0;i<keyList.size();i++) {
-            // 判断是否超过频率
-            String key = keyList.get(i);
-            Integer count = countList.get(i);
-            FrequencyLimit frequencyLimit = annotationMap.get(key);
-            if (Objects.nonNull(count) && count > frequencyLimit.count()) {
-                // 频率超过了
-                log.error("Frequency Limit key:{},value:{}",key,count);
-                throw new BusinessException(ErrorConstant.FREQUENCY_LIMIT);
+        List<String> keyList = new ArrayList<>(frequencyLimitMap.keySet());
+        // List<Integer> countList = multiGetCache(keyList, Integer.class);
+        List<Integer> countList = multiGetCount(keyList);
+        // List<FrequencyLimitDTO> frequencyLimitDTOList = new ArrayList<>();
+        if (CollectionUtils.isNotEmpty(countList)) {
+            for (int i=0;i< keyList.size();i++) {
+                String key = keyList.get(i);
+                FrequencyLimit frequencyLimit = frequencyLimitMap.get(key);
+                // TODO 存在数组越界问题
+                Integer limitCount = countList.get(i);
+                if (ObjectUtil.isNotNull(limitCount) && limitCount >= frequencyLimit.count()) {
+                    log.warn("用户{}调用{}方法次数过多，触发限流策略","frankzhou",SpELUtil.getMethodKey(method));
+                    throw new BusinessException(new ResultCodeDTO(91131,"call api frequency limit","请求次数过多，请稍后再试"));
+                }
+
+                // FrequencyLimitDTO frequencyLimitDTO = buildFrequencyLimitDTO(key, frequencyLimit);
+                // frequencyLimitDTOList.add(frequencyLimitDTO);
             }
         }
 
         try {
             return jp.proceed();
         } finally {
-            // 自增统计值
-            annotationMap.forEach((k,v) -> {
-                cacheIncr(k,v.time(),v.unit());
+            // 自增调用次数
+            frequencyLimitMap.forEach((k,v) -> {
+                cacheIncr(k, v.time(), v.unit());
             });
         }
     }
@@ -114,7 +116,25 @@ public class FrequencyLimitAspect {
         if (CollectionUtils.isEmpty(cacheList) || Objects.isNull(cacheList)) {
             return new ArrayList<>();
         }
-        return cacheList.stream().map(x -> BeanUtil.toBean(x,clazz)).collect(Collectors.toList());
+
+        return cacheList.stream().map(x -> BeanUtil.toBean((Object) x,clazz)).collect(Collectors.toList());
+    }
+
+    private List<Integer> multiGetCount(List<String> keyList) {
+        List<String> cacheList = stringRedisTemplate.opsForValue().multiGet(keyList);
+        if (cacheList == null || CollectionUtils.isEmpty(cacheList)) {
+            return new ArrayList<>();
+        }
+
+        List<Integer> resultList = new ArrayList<>();
+        for (String cache : cacheList) {
+            if (ObjectUtil.isNotNull(cache)) {
+                resultList.add(Integer.valueOf(cache));
+            }
+        }
+        return resultList;
+        // return cacheList.stream().map(x -> Integer.valueOf(x)).collect(Collectors.toList());
+        // return cacheList.stream().map(Integer::valueOf).collect(Collectors.toList());
     }
 
     /**
@@ -129,6 +149,16 @@ public class FrequencyLimitAspect {
             // key不存在，添加缓存
             stringRedisTemplate.opsForValue().setIfAbsent(key,"1",time,unit);
         }
+    }
+
+    private FrequencyLimitDTO buildFrequencyLimitDTO(String key, FrequencyLimit frequencyLimit) {
+        FrequencyLimitDTO targetDto = FrequencyLimitDTO.builder()
+                .key(key)
+                .time(frequencyLimit.time())
+                .unit(frequencyLimit.unit())
+                .count(frequencyLimit.count())
+                .build();
+        return targetDto;
     }
 
     private Method getMethod(ProceedingJoinPoint jp) {

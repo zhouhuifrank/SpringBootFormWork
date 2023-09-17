@@ -1,5 +1,6 @@
 package com.frankzhou.project.annotation;
 
+import java.lang.annotation.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -8,6 +9,9 @@ import java.util.concurrent.TimeUnit;
  * @description 表单防重提交注解 spEL表达式版本
  * @date 2023-06-10
  */
+@Documented
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface RepeatSubmitV2 {
 
     /**
@@ -36,6 +40,6 @@ public @interface RepeatSubmitV2 {
     TimeUnit unit() default TimeUnit.SECONDS;
 
     enum Target {
-        UID,IP,URL
+        UID,IP,URL,EL
     }
 }
