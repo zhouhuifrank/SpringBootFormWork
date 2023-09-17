@@ -20,7 +20,7 @@ public class MyThreadFactory implements ThreadFactory {
 
     @Override
     public Thread newThread(Runnable r) {
-        // 使用ThreadFactory创建线程，重新设置异常处理器就可以
+        // 使用JKD的ThreadFactory创建线程，重新设置异常处理器
         Thread thread = factory.newThread(r);
         thread.setUncaughtExceptionHandler(new GlobalUncaughtExceptionHandler());
         return thread;

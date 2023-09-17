@@ -38,7 +38,7 @@ spring:
     store-type: redis
 
   redis:
-    host: 127.0.0.1
+    host: 115.159.216.169
     port: 6379
     password: monv205850
     database: 0
@@ -59,3 +59,24 @@ mybatis-plus:
       logic-delete-value: 1 # 逻辑已删除值(默认为 1)
       logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
   mapper-locations: classpath:mapper/*.xml
+
+oss:
+  enabled: false
+  type: MINIO
+  endpoint: http://115.159.216.169:9000
+  access-key: admin
+  secret-key: monv205850
+  default-bucket-name: test
+
+xxl:
+  job:
+    admin:
+      addresses: http://115.159.216.169:7397/xxl-job-admin/
+    executor:
+      address:
+      appname: frank-job
+      ip:
+      port: 9999
+      logpath: D:\develop\data\applogs\xxl-job\jobhandler
+      logretentiondays: 50
+    accessToken:

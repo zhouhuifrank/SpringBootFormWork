@@ -23,25 +23,19 @@ import java.util.concurrent.Executor;
 @EnableAsync
 public class TaskService {
 
-    @Autowired
-    @Qualifier("commonExecutor")
+    @Resource(name = ThreadPoolConfig.COMMON_EXECUTOR)
     private Executor executor;
 
-    @Async
+    @Async(ThreadPoolConfig.COMMON_EXECUTOR)
     public void executeTask() {
-        executor.execute(() -> {
-            log.info("Thread name:{} run",Thread.currentThread().getName());
-            throw new BusinessException("子线程执行失败");
-        });
-        log.info("异步任务执行结束");
+        log.info("Thread name:{}",Thread.currentThread().getName());
+        int a = 10/0;
     }
 
-    @Async
+    @Async(ThreadPoolConfig.RULER_EXECUTOR)
     public void executeBatchTask() {
         for (int i=0;i<100;i++) {
-            executor.execute(() -> {
-                log.info("Thread name:{} value:{}",Thread.currentThread().getName());
-            });
+            log.info("Thread name:{}",Thread.currentThread().getName());
         }
         log.info("异步任务执行结束");
     }

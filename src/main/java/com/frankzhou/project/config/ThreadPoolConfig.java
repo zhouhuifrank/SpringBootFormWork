@@ -1,7 +1,6 @@
 package com.frankzhou.project.config;
 
 import com.frankzhou.project.common.factory.MyThreadFactory;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -24,12 +23,12 @@ public class ThreadPoolConfig implements AsyncConfigurer {
     /**
      * 项目通用线程池
      */
-    private static final String COMMON_EXECUTOR = "commonExecutor";
+    public static final String COMMON_EXECUTOR = "commonExecutor";
 
     /**
      * 规则执行线程池
      */
-    private static final String RULER_EXECUTOR = "rulerExecutor";
+    public static final String RULER_EXECUTOR = "rulerExecutor";
 
     @Override
     public Executor getAsyncExecutor() {
@@ -47,6 +46,7 @@ public class ThreadPoolConfig implements AsyncConfigurer {
         executor.setThreadNamePrefix("common-executor-");
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         executor.setThreadFactory(new MyThreadFactory(executor));
+        executor.setAwaitTerminationMillis(10000);
         executor.initialize();
         return executor;
     }
@@ -60,6 +60,7 @@ public class ThreadPoolConfig implements AsyncConfigurer {
         executor.setThreadNamePrefix("ruler-executor-");
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.DiscardPolicy());
         executor.setThreadFactory(new MyThreadFactory(executor));
+        executor.setAwaitTerminationMillis(10000);
         executor.initialize();
         return executor;
     }

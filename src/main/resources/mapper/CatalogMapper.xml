@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.frankzhou.project.mapper.CatalogMapper">
+
+    <resultMap id="PostFavourMap" type="com.frankzhou.project.model.entity.Catalog">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="parentId" column="parent_id" jdbcType="BIGINT"/>
+        <result property="catalogName" column="catalog_name" jdbcType="VARCHAR"/>
+        <result property="level" column="level" jdbcType="INTEGER"/>
+        <result property="treePath" column="tree_path" jdbcType="VARCHAR"/>
+        <result property="sortNum" column="sort_num" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="insertColumn">
+        parent_id,catalog_name,level,tree_path,
+        sort_num,create_time,update_time
+    </sql>
+
+    <insert id="batchInsert" parameterType="list">
+        insert into
+        catalog(<include refid="insertColumn"/>)
+        values
+        <foreach collection="list" item="target" index="index" separator=",">
+            (
+            #{target.parentId},
+            #{target.catalogName},
+            #{target.level},
+            #{target.treePath},
+            #{target.sortNum},
+            #{target.createTime},
+            #{target.updateTime}
+            )
+        </foreach>
+    </insert>
+
+    <update id="batchUpdate" parameterType="list">
+        update catalog
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="parent_id = case" suffix="end,">
+                <foreach collection="list" item="target" index="index">
+                    <if test="target.parentId != null">
+                        when id = #{target.id}
+                        then #{target.parentId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="catalog_name = case" suffix="end,">
+                <foreach collection="list" item="target" index="index">
+                    <if test="target.catalogName != null and target.catalogName != ''">
+                        when id = #{target.id}
+                        then #{target.catalogName}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="level = case" suffix="end,">
+                <foreach collection="list" item="target" index="index">
+                    <if test="target.level != null">
+                        when id = #{target.id}
+                        then #{target.level}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="tree_path = case" suffix="end,">
+                <foreach collection="list" item="target" index="index">
+                    <if test="target.treePath != null and target.treePath != ''">
+                        when id = #{target.id}
+                        then #{target.treePath}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="sort_num = case" suffix="end,">
+                <foreach collection="list" item="target" index="index">
+                    <if test="target.sortNum != null">
+                        when id = #{target.id}
+                        then #{target.sortNum}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        where
+        is_delete = 0
+        and id in (
+        <foreach collection="list" item="target" separator=",">
+            #{target.id}
+        </foreach>
+        )
+    </update>
+
+</mapper>

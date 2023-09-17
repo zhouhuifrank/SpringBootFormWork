@@ -3,6 +3,9 @@ package com.frankzhou.project.mapper;
 import com.frankzhou.project.model.entity.PostFavour;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
 * @author 22806
@@ -13,6 +16,7 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface PostFavourMapper extends BaseMapper<PostFavour> {
 
+    Integer batchInsert(@Param("list") List<PostFavour> favourList);
 }
 
 

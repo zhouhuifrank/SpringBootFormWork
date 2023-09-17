@@ -13,6 +13,8 @@ public class GlobalUncaughtExceptionHandler implements Thread.UncaughtExceptionH
 
     /**
      * 获取子线程中抛出的异常信息，在主线程中打印出来
+     * 可以不在主线程中通过try-catch处理异常，JVM会回调改方法捕获异常
+     * 给没有通过try-catch捕获的异常做兜底策略
      */
     @Override
     public void uncaughtException(Thread t, Throwable e) {

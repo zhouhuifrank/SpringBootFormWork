@@ -1,5 +1,6 @@
 package com.frankzhou.project.controller;
 
+import com.frankzhou.project.annotation.FrequencyLimit;
 import com.frankzhou.project.annotation.RedissonLock;
 import com.frankzhou.project.annotation.RedissonLockV2;
 import com.frankzhou.project.annotation.RepeatSubmit;
@@ -53,5 +54,13 @@ public class TestController {
     @PostMapping("/repeatSubmit")
     public ResultDTO<Boolean> addUser(@RequestBody UserAddDTO addDTO) {
         return userManager.insertOne(addDTO);
+    }
+
+    @FrequencyLimit(target = FrequencyLimit.Target.EL,spEl = "#phone",time = 2,unit = TimeUnit.MINUTES, count = 15)
+    @FrequencyLimit(target = FrequencyLimit.Target.EL,spEl = "#phone",time = 1,unit = TimeUnit.MINUTES, count = 10)
+    @ApiOperation(value = "【测试】频率控制注解", notes = "FrequencyLimit")
+    @GetMapping("/frequencyLimit")
+    public ResultDTO<String> sendCodeV3(@RequestParam("phone") String phone) {
+        return userService.sendCode(phone);
     }
 }

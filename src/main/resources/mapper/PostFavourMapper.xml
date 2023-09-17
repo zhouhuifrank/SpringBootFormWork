@@ -16,4 +16,18 @@
         id,post_id,user_id,
         create_time,update_time
     </sql>
+
+    <sql id="insertColumn">
+        post_id,user_id
+    </sql>
+
+
+    <insert id="batchInsert" useGeneratedKeys="true" keyProperty="id">
+        insert into
+        post_favour(<include refid="insertColumn"/>)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.postId},#{item.userId})
+        </foreach>
+    </insert>
 </mapper>

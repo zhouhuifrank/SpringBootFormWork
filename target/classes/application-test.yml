@@ -4,9 +4,9 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/comment_system?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://115.159.216.169:3306/comment_system?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
     username: root
-    password: root
+    password: monv205850
     type: com.alibaba.druid.pool.DruidDataSource
 
     #druid 数据源专有配置
@@ -38,7 +38,7 @@ spring:
     store-type: redis
 
   redis:
-    host: 127.0.0.1
+    host: 115.159.216.169
     port: 6379
     password: monv205850
     database: 0
@@ -63,3 +63,24 @@ mybatis-plus:
 # 定义配置信息
 whitelist:
   users: zhouhui,xintong
+
+oss:
+  enabled: false
+  type: MINIO
+  endpoint: http://115.159.216.169:9000
+  access-key: admin
+  secret-key: monv205850
+  default-bucket-name: test
+
+xxl:
+  job:
+    admin:
+      addresses: http://115.159.216.169:7397/xxl-job-admin/
+    executor:
+      address:
+      appname: frank-job
+      ip:
+      port: 9999
+      logpath: D:\develop\data\applogs\xxl-job\jobhandler
+      logretentiondays: 50
+    accessToken: xdsl3ewi3al1oehxmo68pqxer
