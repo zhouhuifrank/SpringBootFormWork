@@ -1,13 +1,10 @@
 package com.frankzhou.project.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.http.HttpStatus;
 import cn.hutool.json.JSONUtil;
-import com.frankzhou.project.common.ResultDTO;
 import com.frankzhou.project.common.exception.BusinessException;
 import com.frankzhou.project.model.dto.catalog.CatalogDTO;
 import com.frankzhou.project.model.entity.Catalog;
-import com.frankzhou.project.service.CatalogService;
 import com.frankzhou.project.service.PushService;
 import com.frankzhou.project.websocket.domain.dto.WebSocketRequestDTO;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotBlank;
 import java.io.IOException;
