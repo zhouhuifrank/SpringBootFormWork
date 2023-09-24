@@ -105,34 +105,6 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-aop:5.3.26" level="project" />
     <orderEntry type="library" name="Maven: org.aspectj:aspectjweaver:1.9.7" level="project" />
     <orderEntry type="library" name="Maven: com.xuxueli:xxl-job-core:2.3.0" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-all:4.1.90.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-codec-dns:4.1.90.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-codec-haproxy:4.1.90.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-codec-http:4.1.90.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-codec-http2:4.1.90.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-codec-memcache:4.1.90.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-codec-mqtt:4.1.90.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-codec-redis:4.1.90.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-codec-smtp:4.1.90.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-codec-socks:4.1.90.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-codec-stomp:4.1.90.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-codec-xml:4.1.90.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-transport-native-unix-common:4.1.90.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-handler-proxy:4.1.90.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-handler-ssl-ocsp:4.1.90.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-resolver:4.1.90.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-transport-rxtx:4.1.90.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-transport-sctp:4.1.90.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-transport-udt:4.1.90.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-transport-classes-epoll:4.1.90.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-transport-classes-kqueue:4.1.90.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-resolver-dns-classes-macos:4.1.90.Final" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Maven: io.netty:netty-transport-native-epoll:linux-x86_64:4.1.90.Final" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Maven: io.netty:netty-transport-native-epoll:linux-aarch_64:4.1.90.Final" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Maven: io.netty:netty-transport-native-kqueue:osx-x86_64:4.1.90.Final" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Maven: io.netty:netty-transport-native-kqueue:osx-aarch_64:4.1.90.Final" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Maven: io.netty:netty-resolver-dns-native-macos:osx-x86_64:4.1.90.Final" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Maven: io.netty:netty-resolver-dns-native-macos:osx-aarch_64:4.1.90.Final" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.groovy:groovy:3.0.16" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.36" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.kafka:spring-kafka:2.8.11" level="project" />
@@ -177,6 +149,39 @@
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.13.5" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.13.5" level="project" />
     <orderEntry type="library" name="Maven: org.bouncycastle:bcprov-jdk15on:1.69" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-all:4.1.76.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-buffer:4.1.90.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-codec:4.1.90.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-codec-dns:4.1.90.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-codec-haproxy:4.1.90.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-codec-http:4.1.90.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-codec-http2:4.1.90.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-codec-memcache:4.1.90.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-codec-mqtt:4.1.90.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-codec-redis:4.1.90.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-codec-smtp:4.1.90.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-codec-socks:4.1.90.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-codec-stomp:4.1.90.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-codec-xml:4.1.90.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-common:4.1.90.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-handler:4.1.90.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-handler-proxy:4.1.90.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-resolver:4.1.90.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-resolver-dns:4.1.90.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-transport:4.1.90.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-transport-rxtx:4.1.90.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-transport-sctp:4.1.90.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-transport-udt:4.1.90.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-transport-classes-epoll:4.1.90.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-transport-native-unix-common:4.1.90.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-transport-classes-kqueue:4.1.90.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-resolver-dns-classes-macos:4.1.90.Final" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: io.netty:netty-transport-native-epoll:linux-x86_64:4.1.90.Final" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: io.netty:netty-transport-native-epoll:linux-aarch_64:4.1.90.Final" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: io.netty:netty-transport-native-kqueue:osx-x86_64:4.1.90.Final" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: io.netty:netty-transport-native-kqueue:osx-aarch_64:4.1.90.Final" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: io.netty:netty-resolver-dns-native-macos:osx-x86_64:4.1.90.Final" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: io.netty:netty-resolver-dns-native-macos:osx-aarch_64:4.1.90.Final" level="project" />
     <orderEntry type="library" name="Maven: com.squareup.okhttp3:okhttp:4.9.2" level="project" />
     <orderEntry type="library" name="Maven: com.squareup.okio:okio:2.8.0" level="project" />
     <orderEntry type="library" name="Maven: org.jetbrains.kotlin:kotlin-stdlib-common:1.6.21" level="project" />
@@ -217,12 +222,6 @@
     <orderEntry type="library" name="Maven: com.github.xiaoymin:knife4j-spring-ui:3.0.3" level="project" />
     <orderEntry type="library" name="Maven: redis.clients:jedis:3.7.0" level="project" />
     <orderEntry type="library" name="Maven: org.redisson:redisson:3.13.6" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-common:4.1.90.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-codec:4.1.90.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-buffer:4.1.90.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-transport:4.1.90.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-resolver-dns:4.1.90.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-handler:4.1.90.Final" level="project" />
     <orderEntry type="library" name="Maven: javax.cache:cache-api:1.1.1" level="project" />
     <orderEntry type="library" name="Maven: io.projectreactor:reactor-core:3.4.28" level="project" />
     <orderEntry type="library" name="Maven: org.reactivestreams:reactive-streams:1.0.4" level="project" />

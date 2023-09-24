@@ -21,6 +21,7 @@
 		<easyexcel.version>3.1.2</easyexcel.version>
 		<huttol.version>5.8.9</huttol.version>
 		<juint.version>4.13.2</juint.version>
+		<netty-all.version>4.1.76.Final</netty-all.version>
 		<wxmp.version>4.4.0</wxmp.version>
 		<cos.version>5.6.89</cos.version>
 		<minio.version>8.3.1</minio.version>
@@ -123,12 +124,17 @@
 		<dependency>
 			<groupId>io.minio</groupId>
 			<artifactId>minio</artifactId>
-			<version>8.3.1</version>
+			<version>${minio.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-all</artifactId>
+			<version>${netty-all.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.squareup.okhttp3</groupId>
 			<artifactId>okhttp</artifactId>
-			<version>4.9.2</version>
+			<version>${okhttp.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-fileupload</groupId>
