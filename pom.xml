@@ -26,6 +26,7 @@
 		<cos.version>5.6.89</cos.version>
 		<minio.version>8.3.1</minio.version>
 		<okhttp.version>4.9.2</okhttp.version>
+		<jwt.version>0.9.1</jwt.version>
 	</properties>
 
 	<parent>
@@ -119,7 +120,7 @@
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt</artifactId>
-			<version>0.9.1</version>
+			<version>${jwt.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.minio</groupId>
