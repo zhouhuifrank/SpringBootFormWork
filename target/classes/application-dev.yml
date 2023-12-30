@@ -109,6 +109,9 @@ audience:
   # Jwt的签发主体，存入issuer
   name: workhours
 
+jwt:
+  secret: asdsads
+
 # 白名单配置
 whitelist:
   users: zhouhui,xintong
@@ -133,3 +136,8 @@ xxl:
       logpath: D:\develop\data\applogs\xxl-job\jobhandler
       logretentiondays: 50
     accessToken:
+
+dash:
+  scope:
+    api:
+      key: sk-ab0ada29ccd840f6b342c4af0f670a7f

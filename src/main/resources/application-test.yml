@@ -64,6 +64,9 @@ mybatis-plus:
 whitelist:
   users: zhouhui,xintong
 
+jwt:
+  secret: asdsads
+
 oss:
   enabled: false
   type: MINIO
@@ -84,3 +87,9 @@ xxl:
       logpath: D:\develop\data\applogs\xxl-job\jobhandler
       logretentiondays: 50
     accessToken: xdsl3ewi3al1oehxmo68pqxer
+
+# aliyun big model key
+dash:
+  scope:
+    api:
+      key: sk-ab0ada29ccd840f6b342c4af0f670a7f

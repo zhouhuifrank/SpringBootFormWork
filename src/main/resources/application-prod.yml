@@ -68,6 +68,9 @@ oss:
   secret-key: monv205850
   default-bucket-name: test
 
+jwt:
+  secret: asdsads
+
 xxl:
   job:
     admin:

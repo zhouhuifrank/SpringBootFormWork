@@ -12,6 +12,10 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author This.FrankZhou
@@ -37,5 +41,16 @@ public class EventTests {
         User targetUser = userMapper.selectOne(wrapper);
         eventPublisher.publishEvent(new UserRegisterEvent(this, targetUser));
         log.info("事件发布完成");
+    }
+
+    @Test
+    public void testListConvert() {
+        List<User> userList = new ArrayList<>();
+        Map<String, User> map = userList.stream().collect(Collectors.toMap(User::getUserName, dto -> dto));
+        if (map.containsKey("zhou")) {
+            log.info("成功");
+        } else {
+            log.info("失败");
+        }
     }
 }
